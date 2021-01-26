@@ -6,7 +6,7 @@ namespace Safe\Exceptions;
 class CurlException extends \Exception implements SafeExceptionInterface
 {
     /**
-     * @param resource $ch
+     * @param \CurlHandle $ch
      */
     public static function createFromCurlResource($ch): self
     {
