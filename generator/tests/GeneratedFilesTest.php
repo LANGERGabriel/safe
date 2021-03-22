@@ -5,7 +5,6 @@ namespace Safe;
 use PHPUnit\Framework\TestCase;
 use Safe\Exceptions\DatetimeException;
 use function restore_error_handler;
-use Safe\Exceptions\StringsException;
 use SimpleXMLElement;
 
 /**
@@ -22,15 +21,6 @@ class GeneratedFilesTest extends TestCase
         $this->assertSame('foo', sprintf('foo'));
         $this->assertSame('foobar', sprintf('foo%s', 'bar'));
         $this->assertSame('foobarbaz', sprintf('foo%s%s', 'bar', 'baz'));
-
-        set_error_handler(function () {
-        });
-        try {
-            $this->expectException(StringsException::class);
-            sprintf('foo%s%s', 'bar');
-        } finally {
-            restore_error_handler();
-        }
     }
 
     public function testPregMatch()

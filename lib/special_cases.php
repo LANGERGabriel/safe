@@ -216,7 +216,7 @@ function openssl_encrypt(string $data, string $method, string $key, int $options
  * socket from the given
  * buffer.
  *
- * @param resource $socket
+ * @param \Socket $socket
  * @param string $buffer The buffer to be written.
  * @param int $length The optional parameter length can specify an
  * alternate length of bytes written to the socket. If this length is

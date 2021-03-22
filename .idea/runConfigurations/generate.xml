@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="generate" type="PhpLocalRunConfigurationType" factoryName="PHP Console" path="$PROJECT_DIR$/generator/safe.php" scriptParameters="generate">
+    <CommandLine workingDirectory="$PROJECT_DIR$/generator" />
+    <method v="2" />
+  </configuration>
+</component>

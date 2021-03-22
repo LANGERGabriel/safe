@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="cs-check" type="ComposerRunConfigurationType" factoryName="Composer Script">
+    <option name="commandLineParameters" value="" />
+    <option name="pathToComposerJson" value="$PROJECT_DIR$/generator/composer.json" />
+    <option name="script" value="cs-check" />
+    <method v="2" />
+  </configuration>
+</component>
