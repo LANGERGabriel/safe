@@ -29,7 +29,7 @@ class DateTimeImmutable extends \DateTimeImmutable
     public function __construct($time = 'now', $timezone = null)
     {
         parent::__construct($time, $timezone);
-        $this->innerDateTime = new parent($time, $timezone);
+        $this->innerDateTime = new \DateTimeImmutable($time, $timezone);
     }
 
     //switch between regular datetime and safe version
@@ -57,7 +57,7 @@ class DateTimeImmutable extends \DateTimeImmutable
      */
     public static function createFromFormat($format, $time, $timezone = null): self
     {
-        $datetime = parent::createFromFormat($format, $time, $timezone);
+        $datetime = \DateTimeImmutable::createFromFormat($format, $time, $timezone);
         if ($datetime === false) {
             throw DatetimeException::createFromPhpError();
         }
@@ -238,7 +238,7 @@ class DateTimeImmutable extends \DateTimeImmutable
      */
     public static function createFromMutable($dateTime): self
     {
-        return self::createFromRegular(parent::createFromMutable($dateTime));
+        return self::createFromRegular(\DateTimeImmutable::createFromMutable($dateTime));
     }
 
     /**
@@ -247,7 +247,7 @@ class DateTimeImmutable extends \DateTimeImmutable
      */
     public static function __set_state($array): self
     {
-        return self::createFromRegular(parent::__set_state($array));
+        return self::createFromRegular(\DateTimeImmutable::__set_state($array));
     }
 
     public function getTimezone(): DateTimeZone
