@@ -9,6 +9,8 @@
 Safe PHP
 ========
 
+This is a fork of [thecodingmachine/safe](https://github.com/thecodingmachine/safe) to add compatibility to PHP 8.0 (PHP 7 support is removed).
+
 **Work in progress**
 
 A set of core PHP functions rewritten to throw exceptions instead of returning `false` when an error is encountered.
