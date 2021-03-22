@@ -115,7 +115,7 @@ tool that performs instant refactoring of your application.
 Run
 
 ```bash
-$ composer require --dev rector/rector:^0.7
+$ composer require --dev rector/rector:^0.8
 ```
 
 to install `rector/rector`.
@@ -123,7 +123,7 @@ to install `rector/rector`.
 Run
 
 ```bash
-vendor/bin/rector process src/ --config vendor/thecodingmachine/safe/rector-migrate-0.7.php
+vendor/bin/rector process src/ --config vendor/thecodingmachine/safe/rector-migrate-0.8.php
 ```
 
 to run `rector/rector`.
