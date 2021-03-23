@@ -238,7 +238,7 @@ class DateTimeImmutable extends \DateTimeImmutable
      */
     public static function createFromMutable($dateTime): self
     {
-        return self::createFromRegular(parent::createFromMutable($dateTime));
+        return self::createFromRegular(\DateTimeImmutable::createFromMutable($dateTime));
     }
 
     /**
@@ -247,7 +247,7 @@ class DateTimeImmutable extends \DateTimeImmutable
      */
     public static function __set_state($array): self
     {
-        return self::createFromRegular(parent::__set_state($array));
+        return self::createFromRegular(\DateTimeImmutable::__set_state($array));
     }
 
     public function getTimezone(): DateTimeZone

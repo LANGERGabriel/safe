@@ -141,6 +141,7 @@ class DateTimeImmutableTest extends TestCase
 
         $this->assertEquals($safeDatetime->getTimestamp(), $newDatetime->getTimestamp());
         $this->assertEquals($safeDatetime->getTimezone(), $newDatetime->getTimezone());
+        $this->assertEquals($safeDatetime->format('Y-m-d'), $newDatetime->format('Y-m-d'));
     }
 
     public function testComparaison(): void
@@ -195,5 +196,13 @@ class DateTimeImmutableTest extends TestCase
         $d = new \Safe\DateTimeImmutable('2019-01-01');
         $d2 = \Safe\DateTimeImmutable::createFromRegular($d->getInnerDateTime());
         $this->assertSame($d->format('Y-m-d H:i:s.u'), $d2->format('Y-m-d H:i:s.u'));
+    }
+
+    public function testCreateFromMutable(): void
+    {
+        $d = new \DateTime('2019-01-01');
+        $d2 = \Safe\DateTimeImmutable::createFromMutable($d);
+        $d3 = $d2->getInnerDateTime();
+        $this->assertSame($d->format('Y-m-d H:i:s.u'), $d3->format('Y-m-d H:i:s.u'));
     }
 }
