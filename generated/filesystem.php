@@ -204,6 +204,63 @@ function fflush($stream): void
 
 
 /**
+ * Gets a character from the given file pointer.
+ *
+ * @param resource $stream The file pointer must be valid, and must point to
+ * a file successfully opened by fopen or
+ * fsockopen (and not yet closed by
+ * fclose).
+ * @return string Returns a string containing a single character read from the file pointed
+ * to by stream. Returns FALSE on EOF.
+ * @throws FilesystemException
+ *
+ */
+function fgetc($stream): string
+{
+    error_clear_last();
+    $result = \fgetc($stream);
+    if ($result === false) {
+        throw FilesystemException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * Gets a line from file pointer.
+ *
+ * @param resource $handle The file pointer must be valid, and must point to
+ * a file successfully opened by fopen or
+ * fsockopen (and not yet closed by
+ * fclose).
+ * @param int $length Reading ends when length - 1 bytes have been
+ * read, or a newline (which is included in the return value), or an EOF
+ * (whichever comes first). If no length is specified, it will keep
+ * reading from the stream until it reaches the end of the line.
+ * @return string Returns a string of up to length - 1 bytes read from
+ * the file pointed to by handle. If there is no more data
+ * to read in the file pointer, then FALSE is returned.
+ *
+ * If an error occurs, FALSE is returned.
+ * @throws FilesystemException
+ *
+ */
+function fgets($handle, int $length = null): string
+{
+    error_clear_last();
+    if ($length !== null) {
+        $result = \fgets($handle, $length);
+    } else {
+        $result = \fgets($handle);
+    }
+    if ($result === false) {
+        throw FilesystemException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
  * This function is similar to file, except that
  * file_get_contents returns the file in a
  * string, starting at the specified offset
@@ -446,6 +503,29 @@ function filectime(string $filename): int
 
 
 /**
+ * Gets the file group. The group ID is returned in numerical format, use
+ * posix_getgrgid to resolve it to a group name.
+ *
+ * @param string $filename Path to the file.
+ * @return int Returns the group ID of the file, or FALSE if
+ * an error occurs. The group ID is returned in numerical format, use
+ * posix_getgrgid to resolve it to a group name.
+ * Upon failure, FALSE is returned.
+ * @throws FilesystemException
+ *
+ */
+function filegroup(string $filename): int
+{
+    error_clear_last();
+    $result = \filegroup($filename);
+    if ($result === false) {
+        throw FilesystemException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
  * Gets the file inode.
  *
  * @param string $filename Path to the file.
@@ -553,6 +633,30 @@ function filesize(string $filename): int
 {
     error_clear_last();
     $result = \filesize($filename);
+    if ($result === false) {
+        throw FilesystemException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * Returns the type of the given file.
+ *
+ * @param string $filename Path to the file.
+ * @return string Returns the type of the file. Possible values are fifo, char,
+ * dir, block, link, file, socket and unknown.
+ *
+ * Returns FALSE if an error occurs. filetype will also
+ * produce an E_NOTICE message if the stat call fails
+ * or if the file type is unknown.
+ * @throws FilesystemException
+ *
+ */
+function filetype(string $filename): string
+{
+    error_clear_last();
+    $result = \filetype($filename);
     if ($result === false) {
         throw FilesystemException::createFromPhpError();
     }
@@ -910,6 +1014,339 @@ function fread($stream, int $length): string
 
 
 /**
+ * The function fscanf is similar to
+ * sscanf, but it takes its input from a file
+ * associated with stream and interprets the
+ * input according to the specified format, which is
+ * described in the documentation for sprintf.
+ *
+ * Any whitespace in the format string matches any whitespace in the input
+ * stream. This means that even a tab \t in the format
+ * string can match a single space character in the input stream.
+ *
+ * Each call to fscanf reads one line from the file.
+ *
+ * @param resource $stream A file system pointer resource
+ * that is typically created using fopen.
+ * @param string $format The format string is composed of zero or more directives:
+ * ordinary characters (excluding %) that are
+ * copied directly to the result and conversion
+ * specifications, each of which results in fetching its
+ * own parameter.
+ *
+ * A conversion specification follows this prototype:
+ * %[argnum$][flags][width][.precision]specifier.
+ *
+ * An integer followed by a dollar sign $,
+ * to specify which number argument to treat in the conversion.
+ *
+ *
+ * Flags
+ *
+ *
+ *
+ * Flag
+ * Description
+ *
+ *
+ *
+ *
+ * -
+ *
+ * Left-justify within the given field width;
+ * Right justification is the default
+ *
+ *
+ *
+ * +
+ *
+ * Prefix positive numbers with a plus sign
+ * +; Default only negative
+ * are prefixed with a negative sign.
+ *
+ *
+ *
+ * (space)
+ *
+ * Pads the result with spaces.
+ * This is the default.
+ *
+ *
+ *
+ * 0
+ *
+ * Only left-pads numbers with zeros.
+ * With s specifiers this can
+ * also right-pad with zeros.
+ *
+ *
+ *
+ * '(char)
+ *
+ * Pads the result with the character (char).
+ *
+ *
+ *
+ *
+ *
+ *
+ * An integer that says how many characters (minimum)
+ * this conversion should result in.
+ *
+ * A period . followed by an integer
+ * who's meaning depends on the specifier:
+ *
+ *
+ *
+ * For e, E,
+ * f and F
+ * specifiers: this is the number of digits to be printed
+ * after the decimal point (by default, this is 6).
+ *
+ *
+ *
+ *
+ * For g and G
+ * specifiers: this is the maximum number of significant
+ * digits to be printed.
+ *
+ *
+ *
+ *
+ * For s specifier: it acts as a cutoff point,
+ * setting a maximum character limit to the string.
+ *
+ *
+ *
+ *
+ *
+ * If the period is specified without an explicit value for precision,
+ * 0 is assumed.
+ *
+ *
+ *
+ *
+ * Specifiers
+ *
+ *
+ *
+ * Specifier
+ * Description
+ *
+ *
+ *
+ *
+ * %
+ *
+ * A literal percent character. No argument is required.
+ *
+ *
+ *
+ * b
+ *
+ * The argument is treated as an integer and presented
+ * as a binary number.
+ *
+ *
+ *
+ * c
+ *
+ * The argument is treated as an integer and presented
+ * as the character with that ASCII.
+ *
+ *
+ *
+ * d
+ *
+ * The argument is treated as an integer and presented
+ * as a (signed) decimal number.
+ *
+ *
+ *
+ * e
+ *
+ * The argument is treated as scientific notation (e.g. 1.2e+2).
+ * The precision specifier stands for the number of digits after the
+ * decimal point since PHP 5.2.1. In earlier versions, it was taken as
+ * number of significant digits (one less).
+ *
+ *
+ *
+ * E
+ *
+ * Like the e specifier but uses
+ * uppercase letter (e.g. 1.2E+2).
+ *
+ *
+ *
+ * f
+ *
+ * The argument is treated as a float and presented
+ * as a floating-point number (locale aware).
+ *
+ *
+ *
+ * F
+ *
+ * The argument is treated as a float and presented
+ * as a floating-point number (non-locale aware).
+ * Available as of PHP 5.0.3.
+ *
+ *
+ *
+ * g
+ *
+ *
+ * General format.
+ *
+ *
+ * Let P equal the precision if nonzero, 6 if the precision is omitted,
+ * or 1 if the precision is zero.
+ * Then, if a conversion with style E would have an exponent of X:
+ *
+ *
+ * If P &gt; X ≥ −4, the conversion is with style f and precision P − (X + 1).
+ * Otherwise, the conversion is with style e and precision P − 1.
+ *
+ *
+ *
+ *
+ * G
+ *
+ * Like the g specifier but uses
+ * E and f.
+ *
+ *
+ *
+ * h
+ *
+ * Like the g specifier but uses F.
+ * Available as of PHP 8.0.0.
+ *
+ *
+ *
+ * H
+ *
+ * Like the g specifier but uses
+ * E and F. Available as of PHP 8.0.0.
+ *
+ *
+ *
+ * o
+ *
+ * The argument is treated as an integer and presented
+ * as an octal number.
+ *
+ *
+ *
+ * s
+ *
+ * The argument is treated and presented as a string.
+ *
+ *
+ *
+ * u
+ *
+ * The argument is treated as an integer and presented
+ * as an unsigned decimal number.
+ *
+ *
+ *
+ * x
+ *
+ * The argument is treated as an integer and presented
+ * as a hexadecimal number (with lowercase letters).
+ *
+ *
+ *
+ * X
+ *
+ * The argument is treated as an integer and presented
+ * as a hexadecimal number (with uppercase letters).
+ *
+ *
+ *
+ *
+ *
+ *
+ * General format.
+ *
+ * Let P equal the precision if nonzero, 6 if the precision is omitted,
+ * or 1 if the precision is zero.
+ * Then, if a conversion with style E would have an exponent of X:
+ *
+ * If P &gt; X ≥ −4, the conversion is with style f and precision P − (X + 1).
+ * Otherwise, the conversion is with style e and precision P − 1.
+ *
+ * The c type specifier ignores padding and width
+ *
+ * Attempting to use a combination of the string and width specifiers with character sets that require more than one byte per character may result in unexpected results
+ *
+ * Variables will be co-erced to a suitable type for the specifier:
+ *
+ * Type Handling
+ *
+ *
+ *
+ * Type
+ * Specifiers
+ *
+ *
+ *
+ *
+ * string
+ * s
+ *
+ *
+ * integer
+ *
+ * d,
+ * u,
+ * c,
+ * o,
+ * x,
+ * X,
+ * b
+ *
+ *
+ *
+ * double
+ *
+ * g,
+ * G,
+ * e,
+ * E,
+ * f,
+ * F
+ *
+ *
+ *
+ *
+ *
+ * @param string|int|float|null $vars The optional assigned values.
+ * @return array|int If only two parameters were passed to this function, the values parsed will be
+ * returned as an array. Otherwise, if optional parameters are passed, the
+ * function will return the number of assigned values. The optional
+ * parameters must be passed by reference.
+ *
+ * If there are more substrings expected in the format
+ * than there are available within string,
+ * NULL will be returned. On other errors, FALSE will be returned.
+ * @throws FilesystemException
+ *
+ */
+function fscanf($stream, string $format, ...$vars)
+{
+    error_clear_last();
+    $result = \fscanf($stream, $format, ...$vars);
+    if ($result === false) {
+        throw FilesystemException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
  * Gathers the statistics of the file opened by the file
  * pointer stream. This function is similar to the
  * stat function except that it operates
@@ -927,6 +1364,31 @@ function fstat($stream): array
 {
     error_clear_last();
     $result = \fstat($stream);
+    if ($result === false) {
+        throw FilesystemException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * Returns the position of the file pointer referenced by stream.
+ *
+ * @param resource $stream The file pointer must be valid, and must point to a file successfully
+ * opened by fopen or popen.
+ * ftell gives undefined results for append-only streams
+ * (opened with "a" flag).
+ * @return int Returns the position of the file pointer referenced by
+ * stream as an integer; i.e., its offset into the file stream.
+ *
+ * If an error occurs, returns FALSE.
+ * @throws FilesystemException
+ *
+ */
+function ftell($stream): int
+{
+    error_clear_last();
+    $result = \ftell($stream);
     if ($result === false) {
         throw FilesystemException::createFromPhpError();
     }
@@ -1159,6 +1621,32 @@ function link(string $target, string $link): void
 
 
 /**
+ * Gets information about a link.
+ *
+ * This function is used to verify if a link (pointed to by
+ * path) really exists (using the same method as the
+ * S_ISLNK macro defined in stat.h).
+ *
+ * @param string $path Path to the link.
+ * @return int linkinfo returns the st_dev field
+ * of the Unix C stat structure returned by the lstat
+ * system call. Returns a non-negative integer on success, -1 in case the link was not found,
+ * or FALSE if an open.base_dir violation occurs.
+ * @throws FilesystemException
+ *
+ */
+function linkinfo(string $path): int
+{
+    error_clear_last();
+    $result = \linkinfo($path);
+    if ($result === false) {
+        throw FilesystemException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
  * Gathers the statistics of the file or symbolic link named by
  * filename.
  *
@@ -1289,6 +1777,43 @@ function parse_ini_string(string $ini_string, bool $process_sections = false, in
 {
     error_clear_last();
     $result = \parse_ini_string($ini_string, $process_sections, $scanner_mode);
+    if ($result === false) {
+        throw FilesystemException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * Opens a pipe to a process executed by forking the command given
+ * by command.
+ *
+ * @param string $command The command
+ * @param string $mode The mode. Either 'r' for reading, or 'w'
+ * for writing.
+ *
+ * On Windows, popen defaults to text mode, i.e. any \n
+ * characters written to or read from the pipe will be translated to \r\n.
+ * If this is not desired, binary mode can be enforced by setting mode
+ * to 'rb' and 'wb', respectively.
+ * @return resource Returns a file pointer identical to that returned by
+ * fopen, except that it is unidirectional (may
+ * only be used for reading or writing) and must be closed with
+ * pclose. This pointer may be used with
+ * fgets, fgetss, and
+ * fwrite. When the mode is 'r', the returned
+ * file pointer equals to the STDOUT of the command, when the mode
+ * is 'w', the returned file pointer equals to the STDIN of the
+ * command.
+ *
+ * If an error occurs, returns FALSE.
+ * @throws FilesystemException
+ *
+ */
+function popen(string $command, string $mode)
+{
+    error_clear_last();
+    $result = \popen($command, $mode);
     if ($result === false) {
         throw FilesystemException::createFromPhpError();
     }
@@ -1455,6 +1980,177 @@ function rmdir(string $dirname, $context = null): void
     if ($result === false) {
         throw FilesystemException::createFromPhpError();
     }
+}
+
+
+/**
+ * Gathers the statistics of the file named by
+ * filename.  If filename is a
+ * symbolic link, statistics are from the file itself, not the symlink.
+ * Prior to PHP 7.4.0, on Windows NTS builds the size,
+ * atime, mtime and ctime
+ * statistics have been from the symlink, in this case.
+ *
+ * lstat is identical to stat
+ * except it would instead be based off the symlinks status.
+ *
+ * @param string $filename Path to the file.
+ * @return array
+ * stat and fstat result
+ * format
+ *
+ *
+ *
+ * Numeric
+ * Associative
+ * Description
+ *
+ *
+ *
+ *
+ * 0
+ * dev
+ * device number ***
+ *
+ *
+ * 1
+ * ino
+ * inode number ****
+ *
+ *
+ * 2
+ * mode
+ * inode protection mode
+ *
+ *
+ * 3
+ * nlink
+ * number of links
+ *
+ *
+ * 4
+ * uid
+ * userid of owner *
+ *
+ *
+ * 5
+ * gid
+ * groupid of owner *
+ *
+ *
+ * 6
+ * rdev
+ * device type, if inode device
+ *
+ *
+ * 7
+ * size
+ * size in bytes
+ *
+ *
+ * 8
+ * atime
+ * time of last access (Unix timestamp)
+ *
+ *
+ * 9
+ * mtime
+ * time of last modification (Unix timestamp)
+ *
+ *
+ * 10
+ * ctime
+ * time of last inode change (Unix timestamp)
+ *
+ *
+ * 11
+ * blksize
+ * blocksize of filesystem IO **
+ *
+ *
+ * 12
+ * blocks
+ * number of 512-byte blocks allocated **
+ *
+ *
+ *
+ *
+ *
+ * * On Windows this will always be 0.
+ *
+ * ** Only valid on systems supporting the st_blksize type - other
+ * systems (e.g. Windows) return -1.
+ *
+ * *** On Windows, as of PHP 7.4.0, this is the serial number of the volume that contains the file,
+ * which is a 64-bit unsigned integer, so may overflow.
+ * Previously, it was the numeric representation of the drive letter (e.g. 2
+ * for C:) for stat, and 0 for
+ * lstat.
+ *
+ * **** On Windows, as of PHP 7.4.0, this is the identifier associated with the file,
+ * which is a 64-bit unsigned integer, so may overflow.
+ * Previously, it was always 0.
+ *
+ * The value of mode contains information read by several functions.
+ * When written in octal, starting from the right, the first three digits are returned by
+ * chmod. The next digit is ignored by PHP. The next two digits indicate
+ * the file type:
+ *
+ * mode file types
+ *
+ *
+ *
+ * mode in octal
+ * Meaning
+ *
+ *
+ *
+ *
+ * 0140000
+ * socket
+ *
+ *
+ * 0120000
+ * link
+ *
+ *
+ * 0100000
+ * regular file
+ *
+ *
+ * 0060000
+ * block device
+ *
+ *
+ * 0040000
+ * directory
+ *
+ *
+ * 0020000
+ * character device
+ *
+ *
+ * 0010000
+ * fifo
+ *
+ *
+ *
+ *
+ * So for example a regular file could be 0100644 and a directory could be
+ * 0040755.
+ *
+ * In case of error, stat returns FALSE.
+ * @throws FilesystemException
+ *
+ */
+function stat(string $filename): array
+{
+    error_clear_last();
+    $result = \stat($filename);
+    if ($result === false) {
+        throw FilesystemException::createFromPhpError();
+    }
+    return $result;
 }
 
 

@@ -31,6 +31,50 @@ function posix_access(string $filename, int $flags = 0): void
 
 
 /**
+ * Generates a string which is the pathname for the current
+ * controlling terminal for the process.  On error this will set errno,
+ * which can be checked using posix_get_last_error
+ *
+ * @return string Upon successful completion, returns string of the pathname to
+ * the current controlling terminal.  Otherwise FALSE is returned and errno
+ * is set, which can be checked with posix_get_last_error.
+ * @throws PosixException
+ *
+ */
+function posix_ctermid(): string
+{
+    error_clear_last();
+    $result = \posix_ctermid();
+    if ($result === false) {
+        throw PosixException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * Gets the absolute pathname of the script's current working directory.
+ * On error, it sets errno which can be checked using
+ * posix_get_last_error
+ *
+ * @return string Returns a string of the absolute pathname on success.
+ * On error, returns FALSE and sets errno which can be checked with
+ * posix_get_last_error.
+ * @throws PosixException
+ *
+ */
+function posix_getcwd(): string
+{
+    error_clear_last();
+    $result = \posix_getcwd();
+    if ($result === false) {
+        throw PosixException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
  * Gets information about a group provided its id.
  *
  * @param int $group_id The group id.
@@ -208,6 +252,97 @@ function posix_getpgid(int $process_id): int
 {
     error_clear_last();
     $result = \posix_getpgid($process_id);
+    if ($result === false) {
+        throw PosixException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * Returns an array of information about the given user.
+ *
+ * @param string $username An alphanumeric username.
+ * @return array On success an array with the following elements is returned, else
+ * FALSE is returned:
+ *
+ * The user information array
+ *
+ *
+ *
+ * Element
+ * Description
+ *
+ *
+ *
+ *
+ * name
+ *
+ * The name element contains the username of the user. This is
+ * a short, usually less than 16 character "handle" of the
+ * user, not the real, full name. This should be the same as
+ * the username parameter used when
+ * calling the function, and hence redundant.
+ *
+ *
+ *
+ * passwd
+ *
+ * The passwd element contains the user's password in an
+ * encrypted format. Often, for example on a system employing
+ * "shadow" passwords, an asterisk is returned instead.
+ *
+ *
+ *
+ * uid
+ *
+ * User ID of the user in numeric form.
+ *
+ *
+ *
+ * gid
+ *
+ * The group ID of the user. Use the function
+ * posix_getgrgid to resolve the group
+ * name and a list of its members.
+ *
+ *
+ *
+ * gecos
+ *
+ * GECOS is an obsolete term that refers to the finger
+ * information field on a Honeywell batch processing system.
+ * The field, however, lives on, and its contents have been
+ * formalized by POSIX. The field contains a comma separated
+ * list containing the user's full name, office phone, office
+ * number, and home phone number. On most systems, only the
+ * user's full name is available.
+ *
+ *
+ *
+ * dir
+ *
+ * This element contains the absolute path to the home
+ * directory of the user.
+ *
+ *
+ *
+ * shell
+ *
+ * The shell element contains the absolute path to the
+ * executable of the user's default shell.
+ *
+ *
+ *
+ *
+ *
+ * @throws PosixException
+ *
+ */
+function posix_getpwnam(string $username): array
+{
+    error_clear_last();
+    $result = \posix_getpwnam($username);
     if ($result === false) {
         throw PosixException::createFromPhpError();
     }
@@ -696,6 +831,33 @@ function posix_times(): array
 {
     error_clear_last();
     $result = \posix_times();
+    if ($result === false) {
+        throw PosixException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * Returns a string for the absolute path to the current
+ * terminal device that is open on the file descriptor
+ * file_descriptor.
+ *
+ * @param resource|int $file_descriptor The file descriptor, which is expected to be either a file
+ * resource or an int. An int
+ * will be assumed to be a file descriptor that can be passed directly to
+ * the underlying system call.
+ *
+ * In almost all cases, you will want to provide a file resource.
+ * @return string On success, returns a string of the absolute path of the
+ * file_descriptor. On failure, returns FALSE
+ * @throws PosixException
+ *
+ */
+function posix_ttyname($file_descriptor): string
+{
+    error_clear_last();
+    $result = \posix_ttyname($file_descriptor);
     if ($result === false) {
         throw PosixException::createFromPhpError();
     }

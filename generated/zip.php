@@ -142,3 +142,47 @@ function zip_entry_read($zip_entry, int $len = 1024): string
     }
     return $result;
 }
+
+
+/**
+ * Opens a new zip archive for reading.
+ *
+ * @param string $filename The file name of the ZIP archive to open.
+ * @return resource|int Returns a resource handle for later use with
+ * zip_read and zip_close
+ * or returns either FALSE or the number of error if filename
+ * does not exist or in case of other error.
+ * @throws ZipException
+ *
+ */
+function zip_open(string $filename)
+{
+    error_clear_last();
+    $result = \zip_open($filename);
+    if ($result === false) {
+        throw ZipException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * Reads the next entry in a zip file archive.
+ *
+ * @param resource $zip A ZIP file previously opened with zip_open.
+ * @return resource|int Returns a directory entry resource for later use with the
+ * zip_entry_... functions, or FALSE if
+ * there are no more entries to read, or an error code if an error
+ * occurred.
+ * @throws ZipException
+ *
+ */
+function zip_read($zip)
+{
+    error_clear_last();
+    $result = \zip_read($zip);
+    if ($result === false) {
+        throw ZipException::createFromPhpError();
+    }
+    return $result;
+}

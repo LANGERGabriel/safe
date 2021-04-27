@@ -78,6 +78,30 @@ function getimagesize(string $filename, ?array &$image_info = null): array
 
 
 /**
+ * Identical to getimagesize except that getimagesizefromstring
+ * accepts a string instead of a file name as the first parameter.
+ *
+ * See the getimagesize documentation for details on how this
+ * function works.
+ *
+ * @param string $string The image data, as a string.
+ * @param array|null $image_info See getimagesize.
+ * @return array See getimagesize.
+ * @throws ImageException
+ *
+ */
+function getimagesizefromstring(string $string, ?array &$image_info = null): array
+{
+    error_clear_last();
+    $result = \getimagesizefromstring($string, $image_info);
+    if ($result === false) {
+        throw ImageException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
  * Returns the extension for the given IMAGETYPE_XXX
  * constant.
  *

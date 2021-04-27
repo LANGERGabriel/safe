@@ -92,6 +92,41 @@ function apache_lookup_uri(string $filename): object
 
 
 /**
+ * This function is a wrapper for Apache's table_get and
+ * table_set. It edits the table of notes that exists
+ * during a request. The table's purpose is to allow Apache modules to
+ * communicate.
+ *
+ * The main use for apache_note is to pass information
+ * from one module to another within the same request.
+ *
+ * @param string $note_name The name of the note.
+ * @param string $note_value The value of the note.
+ * @return string If note_value is omitted or NULL, it returns the current value of note
+ * note_name. Otherwise, it
+ * sets the value of note note_name to
+ * note_value and returns the previous value of
+ * note note_name.
+ * If the note cannot be retrieved, FALSE is returned.
+ * @throws ApacheException
+ *
+ */
+function apache_note(string $note_name, string $note_value = null): string
+{
+    error_clear_last();
+    if ($note_value !== null) {
+        $result = \apache_note($note_name, $note_value);
+    } else {
+        $result = \apache_note($note_name);
+    }
+    if ($result === false) {
+        throw ApacheException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
  * Fetches all HTTP request headers from the current request. Works in the
  * Apache, FastCGI, CLI, and FPM webservers.
  *

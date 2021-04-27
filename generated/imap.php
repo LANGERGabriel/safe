@@ -25,6 +25,30 @@ function imap_8bit(string $string): string
 
 
 /**
+ * Returns all of the IMAP alert messages generated since the last
+ * imap_alerts call, or the beginning of the page.
+ *
+ * When imap_alerts is called, the alert stack is
+ * subsequently cleared. The IMAP specification requires that these messages
+ * be passed to the user.
+ *
+ * @return array Returns an array of all of the IMAP alert messages generated or FALSE if
+ * no alert messages are available.
+ * @throws ImapException
+ *
+ */
+function imap_alerts(): array
+{
+    error_clear_last();
+    $result = \imap_alerts();
+    if ($result === false) {
+        throw ImapException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
  * Appends a string message to the specified folder.
  *
  * @param resource $imap An IMAP stream returned by
@@ -315,6 +339,31 @@ function imap_deletemailbox($imap, string $mailbox): void
     if ($result === false) {
         throw ImapException::createFromPhpError();
     }
+}
+
+
+/**
+ * Gets all of the IMAP errors (if any) that have occurred
+ * during this page request or since the error stack was reset.
+ *
+ * When imap_errors is called, the error stack is
+ * subsequently cleared.
+ *
+ * @return array This function returns an array of all of the IMAP error messages
+ * generated since the last imap_errors call,
+ * or the beginning of the page. Returns FALSE if no error messages are
+ * available.
+ * @throws ImapException
+ *
+ */
+function imap_errors(): array
+{
+    error_clear_last();
+    $result = \imap_errors();
+    if ($result === false) {
+        throw ImapException::createFromPhpError();
+    }
+    return $result;
 }
 
 
@@ -739,6 +788,75 @@ function imap_gc($imap, int $flags): void
     if ($result === false) {
         throw ImapException::createFromPhpError();
     }
+}
+
+
+/**
+ * Retrieve the quota level settings, and usage statics per mailbox.
+ *
+ * For a non-admin user version of this function,
+ * please see the imap_get_quotaroot function of PHP.
+ *
+ * @param resource $imap An IMAP stream returned by
+ * imap_open.
+ * @param string $quota_root quota_root should normally be in the form of
+ * user.name where name is the mailbox you wish to
+ * retrieve information about.
+ * @return array Returns an array with integer values limit and usage for the given
+ * mailbox.  The value of limit represents the total amount of space
+ * allowed for this mailbox.  The usage value represents the mailboxes
+ * current level of capacity.  Will return FALSE in the case of failure.
+ *
+ * As of PHP 4.3, the function more properly reflects the
+ * functionality as dictated by the RFC2087.
+ * The array return value has changed to support an unlimited number of returned
+ * resources (i.e.  messages, or sub-folders) with each named resource receiving
+ * an individual array key.  Each key value then contains an another array with
+ * the usage and limit values within it.
+ *
+ * For backwards compatibility reasons, the original access methods are
+ * still available for use, although it is suggested to update.
+ * @throws ImapException
+ *
+ */
+function imap_get_quota($imap, string $quota_root): array
+{
+    error_clear_last();
+    $result = \imap_get_quota($imap, $quota_root);
+    if ($result === false) {
+        throw ImapException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * Retrieve the quota settings per user. The limit value represents the total
+ * amount of space allowed for this user's total mailbox usage.  The usage
+ * value represents the user's current total mailbox capacity.
+ *
+ * @param resource $imap An IMAP stream returned by
+ * imap_open.
+ * @param string $mailbox mailbox should normally be in the form of
+ * which mailbox (i.e. INBOX).
+ * @return array Returns an array of integer values pertaining to the specified user
+ * mailbox.  All values contain a key based upon the resource name, and a
+ * corresponding array with the usage and limit values within.
+ *
+ * This function will return FALSE in the case of call failure, and an
+ * array of information about the connection upon an un-parsable response
+ * from the server.
+ * @throws ImapException
+ *
+ */
+function imap_get_quotaroot($imap, string $mailbox): array
+{
+    error_clear_last();
+    $result = \imap_get_quotaroot($imap, $mailbox);
+    if ($result === false) {
+        throw ImapException::createFromPhpError();
+    }
+    return $result;
 }
 
 
@@ -1179,6 +1297,64 @@ function imap_headers($imap): array
 {
     error_clear_last();
     $result = \imap_headers($imap);
+    if ($result === false) {
+        throw ImapException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * Gets the full text of the last IMAP error message
+ * that occurred on the current page. The error stack is untouched; calling
+ * imap_last_error subsequently, with no intervening
+ * errors, will return the same error.
+ *
+ * @return string Returns the full text of the last IMAP error message that occurred on the
+ * current page. Returns FALSE if no error messages are available.
+ * @throws ImapException
+ *
+ */
+function imap_last_error(): string
+{
+    error_clear_last();
+    $result = \imap_last_error();
+    if ($result === false) {
+        throw ImapException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * Read the list of mailboxes.
+ *
+ * @param resource $imap An IMAP stream returned by
+ * imap_open.
+ * @param string $reference reference should normally be just the server
+ * specification as described in imap_open.
+ * @param string $pattern Specifies where in the mailbox hierarchy
+ * to start searching.
+ *
+ * There are two special characters you can
+ * pass as part of the pattern:
+ * '*' and '%'.
+ * '*' means to return all mailboxes. If you pass
+ * pattern as '*', you will
+ * get a list of the entire mailbox hierarchy.
+ * '%'
+ * means to return the current level only.
+ * '%' as the pattern
+ * parameter will return only the top level
+ * mailboxes; '~/mail/%' on UW_IMAPD will return every mailbox in the ~/mail directory, but none in subfolders of that directory.
+ * @return array Returns an array containing the names of the mailboxes or FALSE in case of failure.
+ * @throws ImapException
+ *
+ */
+function imap_list($imap, string $reference, string $pattern): array
+{
+    error_clear_last();
+    $result = \imap_list($imap, $reference, $pattern);
     if ($result === false) {
         throw ImapException::createFromPhpError();
     }
@@ -1945,6 +2121,169 @@ function imap_savebody($imap, $file, int $message_num, string $section = "", int
 
 
 /**
+ * This function performs a search on the mailbox currently opened
+ * in the given IMAP stream.
+ *
+ * For example, to match all unanswered messages sent by Mom, you'd
+ * use: "UNANSWERED FROM mom". Searches appear to be case
+ * insensitive. This list of criteria is from a reading of the UW
+ * c-client source code and may be incomplete or
+ * inaccurate (see also RFC1176,
+ * section "tag SEARCH search_criteria").
+ *
+ * @param resource $imap An IMAP stream returned by
+ * imap_open.
+ * @param string $criteria A string, delimited by spaces, in which the following keywords are
+ * allowed. Any multi-word arguments (e.g.
+ * FROM "joey smith") must be quoted. Results will match
+ * all criteria entries.
+ *
+ *
+ *
+ * ALL - return all messages matching the rest of the criteria
+ *
+ *
+ *
+ *
+ * ANSWERED - match messages with the \\ANSWERED flag set
+ *
+ *
+ *
+ *
+ * BCC "string" - match messages with "string" in the Bcc: field
+ *
+ *
+ *
+ *
+ * BEFORE "date" - match messages with Date: before "date"
+ *
+ *
+ *
+ *
+ * BODY "string" - match messages with "string" in the body of the message
+ *
+ *
+ *
+ *
+ * CC "string" - match messages with "string" in the Cc: field
+ *
+ *
+ *
+ *
+ * DELETED - match deleted messages
+ *
+ *
+ *
+ *
+ * FLAGGED - match messages with the \\FLAGGED (sometimes
+ * referred to as Important or Urgent) flag set
+ *
+ *
+ *
+ *
+ * FROM "string" - match messages with "string" in the From: field
+ *
+ *
+ *
+ *
+ * KEYWORD "string" - match messages with "string" as a keyword
+ *
+ *
+ *
+ *
+ * NEW - match new messages
+ *
+ *
+ *
+ *
+ * OLD - match old messages
+ *
+ *
+ *
+ *
+ * ON "date" - match messages with Date: matching "date"
+ *
+ *
+ *
+ *
+ * RECENT - match messages with the \\RECENT flag set
+ *
+ *
+ *
+ *
+ * SEEN - match messages that have been read (the \\SEEN flag is set)
+ *
+ *
+ *
+ *
+ * SINCE "date" - match messages with Date: after "date"
+ *
+ *
+ *
+ *
+ * SUBJECT "string" - match messages with "string" in the Subject:
+ *
+ *
+ *
+ *
+ * TEXT "string" - match messages with text "string"
+ *
+ *
+ *
+ *
+ * TO "string" - match messages with "string" in the To:
+ *
+ *
+ *
+ *
+ * UNANSWERED - match messages that have not been answered
+ *
+ *
+ *
+ *
+ * UNDELETED - match messages that are not deleted
+ *
+ *
+ *
+ *
+ * UNFLAGGED - match messages that are not flagged
+ *
+ *
+ *
+ *
+ * UNKEYWORD "string" - match messages that do not have the
+ * keyword "string"
+ *
+ *
+ *
+ *
+ * UNSEEN - match messages which have not been read yet
+ *
+ *
+ *
+ * @param int $flags Valid values for flags are
+ * SE_UID, which causes the returned array to
+ * contain UIDs instead of messages sequence numbers.
+ * @param string $charset MIME character set to use when searching strings.
+ * @return array Returns an array of message numbers or UIDs.
+ *
+ * Return FALSE if it does not understand the search
+ * criteria or no messages have been found.
+ * @throws ImapException
+ *
+ */
+function imap_search($imap, string $criteria, int $flags = SE_FREE, string $charset = ""): array
+{
+    error_clear_last();
+    $result = \imap_search($imap, $criteria, $flags, $charset);
+    if ($result === false) {
+        throw ImapException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
  * Sets an upper limit quota on a per mailbox basis.
  *
  * @param resource $imap An IMAP stream returned by
@@ -2260,6 +2599,32 @@ function imap_timeout(int $timeout_type, int $timeout = -1)
 
 
 /**
+ * This function returns the UID for the given message sequence
+ * number. An UID is a unique identifier that will not change over
+ * time while a message sequence number may change whenever the
+ * content of the mailbox changes.
+ *
+ * This function is the inverse of imap_msgno.
+ *
+ * @param resource $imap An IMAP stream returned by
+ * imap_open.
+ * @param int $message_num The message number.
+ * @return int The UID of the given message.
+ * @throws ImapException
+ *
+ */
+function imap_uid($imap, int $message_num): int
+{
+    error_clear_last();
+    $result = \imap_uid($imap, $message_num);
+    if ($result === false) {
+        throw ImapException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
  * Removes the deletion flag for a specified message, which is set by
  * imap_delete or imap_mail_move.
  *
@@ -2297,6 +2662,32 @@ function imap_unsubscribe($imap, string $mailbox): void
     if ($result === false) {
         throw ImapException::createFromPhpError();
     }
+}
+
+
+/**
+ * Decodes modified UTF-7 string into ISO-8859-1 string.
+ *
+ * This function is needed to decode mailbox names that contain certain
+ * characters which are not in range of printable ASCII characters.
+ *
+ * @param string $string A modified UTF-7 encoding string, as defined in RFC 2060, section 5.1.3.
+ * @return string Returns a string that is encoded in ISO-8859-1 and consists of the same
+ * sequence of characters in string, or FALSE
+ * if string contains invalid modified UTF-7 sequence
+ * or string contains a character that is not part of
+ * ISO-8859-1 character set.
+ * @throws ImapException
+ *
+ */
+function imap_utf7_decode(string $string): string
+{
+    error_clear_last();
+    $result = \imap_utf7_decode($string);
+    if ($result === false) {
+        throw ImapException::createFromPhpError();
+    }
+    return $result;
 }
 
 

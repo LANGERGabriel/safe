@@ -320,6 +320,48 @@ function fsockopen(string $hostname, int $port = -1, ?int &$error_code = null, ?
 
 
 /**
+ * Returns the host name of the Internet host specified by
+ * ip.
+ *
+ * @param string $ip The host IP address.
+ * @return string Returns the host name on success, the unmodified ip
+ * on failure, or FALSE on malformed input.
+ * @throws NetworkException
+ *
+ */
+function gethostbyaddr(string $ip): string
+{
+    error_clear_last();
+    $result = \gethostbyaddr($ip);
+    if ($result === false) {
+        throw NetworkException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * Returns a list of IPv4 addresses to which the Internet host
+ * specified by hostname resolves.
+ *
+ * @param string $hostname The host name.
+ * @return array Returns an array of IPv4 addresses or FALSE if
+ * hostname could not be resolved.
+ * @throws NetworkException
+ *
+ */
+function gethostbynamel(string $hostname): array
+{
+    error_clear_last();
+    $result = \gethostbynamel($hostname);
+    if ($result === false) {
+        throw NetworkException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
  * gethostname gets the standard host name for
  * the local machine.
  *
@@ -374,6 +416,31 @@ function getprotobynumber(int $protocol): string
 {
     error_clear_last();
     $result = \getprotobynumber($protocol);
+    if ($result === false) {
+        throw NetworkException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * getservbyname returns the Internet port
+ * which corresponds to service for the
+ * specified protocol as per
+ * /etc/services.
+ *
+ * @param string $service The Internet service name, as a string.
+ * @param string $protocol protocol is either "tcp"
+ * or "udp" (in lowercase).
+ * @return int Returns the port number, or FALSE if service or
+ * protocol is not found.
+ * @throws NetworkException
+ *
+ */
+function getservbyname(string $service, string $protocol): int
+{
+    error_clear_last();
+    $result = \getservbyname($service, $protocol);
     if ($result === false) {
         throw NetworkException::createFromPhpError();
     }
@@ -438,6 +505,56 @@ function inet_ntop(string $ip): string
 {
     error_clear_last();
     $result = \inet_ntop($ip);
+    if ($result === false) {
+        throw NetworkException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * This function converts a human readable IPv4 or IPv6 address (if PHP
+ * was built with IPv6 support enabled) into an address family appropriate
+ * 32bit or 128bit binary structure.
+ *
+ * @param string $ip A human readable IPv4 or IPv6 address.
+ * @return string Returns the in_addr representation of the given
+ * ip, or FALSE if a syntactically invalid
+ * ip is given (for example, an IPv4 address
+ * without dots or an IPv6 address without colons).
+ * @throws NetworkException
+ *
+ */
+function inet_pton(string $ip): string
+{
+    error_clear_last();
+    $result = \inet_pton($ip);
+    if ($result === false) {
+        throw NetworkException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * The function ip2long generates a long integer
+ * representation of IPv4 Internet network address from its Internet
+ * standard format (dotted string) representation.
+ *
+ * ip2long will also work with non-complete IP
+ * addresses. Read http://publibn.boulder.ibm.com/doc_link/en_US/a_doc_lib/libs/commtrf2/inet_addr.htm
+ * for more info.
+ *
+ * @param string $ip A standard format address.
+ * @return int Returns the long integer or FALSE if ip
+ * is invalid.
+ * @throws NetworkException
+ *
+ */
+function ip2long(string $ip): int
+{
+    error_clear_last();
+    $result = \ip2long($ip);
     if ($result === false) {
         throw NetworkException::createFromPhpError();
     }

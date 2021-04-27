@@ -7,6 +7,30 @@ use Safe\Exceptions\HashException;
 /**
  *
  *
+ * @param string $algo Name of selected hashing algorithm (i.e. "md5", "sha256", "haval160,4", etc..). For a list of supported algorithms see hash_algos.
+ * @param string $filename URL describing location of file to be hashed; Supports fopen wrappers.
+ * @param bool $binary When set to TRUE, outputs raw binary data.
+ * FALSE outputs lowercase hexits.
+ * @return string Returns a string containing the calculated message digest as lowercase hexits
+ * unless binary is set to true in which case the raw
+ * binary representation of the message digest is returned.
+ * @throws HashException
+ *
+ */
+function hash_file(string $algo, string $filename, bool $binary = false): string
+{
+    error_clear_last();
+    $result = \hash_file($algo, $filename, $binary);
+    if ($result === false) {
+        throw HashException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ *
+ *
  * @param string $algo Name of selected hashing algorithm (i.e. "sha256", "sha512", "haval160,4", etc..)
  * See hash_algos for a list of supported algorithms.
  *
@@ -45,6 +69,61 @@ function hash_hkdf(string $algo, string $key, int $length = 0, string $info = ""
 /**
  *
  *
+ * @param string $algo Name of selected hashing algorithm (i.e. "md5", "sha256", "haval160,4", etc..) See hash_hmac_algos for a list of supported algorithms.
+ * @param string $data URL describing location of file to be hashed; Supports fopen wrappers.
+ * @param string $key Shared secret key used for generating the HMAC variant of the message digest.
+ * @param bool $binary When set to TRUE, outputs raw binary data.
+ * FALSE outputs lowercase hexits.
+ * @return string Returns a string containing the calculated message digest as lowercase hexits
+ * unless binary is set to true in which case the raw
+ * binary representation of the message digest is returned.
+ * Returns FALSE when algo is unknown or is a
+ * non-cryptographic hash function, or if the file
+ * data cannot be read.
+ * @throws HashException
+ *
+ */
+function hash_hmac_file(string $algo, string $data, string $key, bool $binary = false): string
+{
+    error_clear_last();
+    $result = \hash_hmac_file($algo, $data, $key, $binary);
+    if ($result === false) {
+        throw HashException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ *
+ *
+ * @param string $algo Name of selected hashing algorithm (i.e. "md5", "sha256", "haval160,4", etc..) See hash_hmac_algos for a list of supported algorithms.
+ * @param string $data Message to be hashed.
+ * @param string $key Shared secret key used for generating the HMAC variant of the message digest.
+ * @param bool $binary When set to TRUE, outputs raw binary data.
+ * FALSE outputs lowercase hexits.
+ * @return string Returns a string containing the calculated message digest as lowercase hexits
+ * unless binary is set to true in which case the raw
+ * binary representation of the message digest is returned.
+ * Returns FALSE when algo is unknown or is a
+ * non-cryptographic hash function.
+ * @throws HashException
+ *
+ */
+function hash_hmac(string $algo, string $data, string $key, bool $binary = false): string
+{
+    error_clear_last();
+    $result = \hash_hmac($algo, $data, $key, $binary);
+    if ($result === false) {
+        throw HashException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ *
+ *
  * @param \HashContext $context Hashing context returned by hash_init.
  * @param string $filename URL describing location of file to be hashed; Supports fopen wrappers.
  * @param \HashContext|null $stream_context Stream context as returned by stream_context_create.
@@ -62,4 +141,28 @@ function hash_update_file(\HashContext $context, string $filename, ?\HashContext
     if ($result === false) {
         throw HashException::createFromPhpError();
     }
+}
+
+
+/**
+ *
+ *
+ * @param string $algo Name of selected hashing algorithm (i.e. "md5", "sha256", "haval160,4", etc..). For a list of supported algorithms see hash_algos.
+ * @param string $data Message to be hashed.
+ * @param bool $binary When set to TRUE, outputs raw binary data.
+ * FALSE outputs lowercase hexits.
+ * @return string Returns a string containing the calculated message digest as lowercase hexits
+ * unless binary is set to true in which case the raw
+ * binary representation of the message digest is returned.
+ * @throws HashException
+ *
+ */
+function hash(string $algo, string $data, bool $binary = false): string
+{
+    error_clear_last();
+    $result = \hash($algo, $data, $binary);
+    if ($result === false) {
+        throw HashException::createFromPhpError();
+    }
+    return $result;
 }

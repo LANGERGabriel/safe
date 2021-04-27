@@ -88,6 +88,33 @@ function dl(string $extension_filename): void
 
 
 /**
+ * Gets the value of a PHP configuration option.
+ *
+ * This function will not return configuration information set when the PHP
+ * was compiled, or read from an Apache configuration file.
+ *
+ * To check whether the system is using a configuration file, try retrieving the
+ * value of the cfg_file_path configuration setting. If this is available, a
+ * configuration file is being used.
+ *
+ * @param string $option The configuration option name.
+ * @return mixed Returns the current value of the PHP configuration variable specified by
+ * option, or FALSE if an error occurs.
+ * @throws InfoException
+ *
+ */
+function get_cfg_var(string $option)
+{
+    error_clear_last();
+    $result = \get_cfg_var($option);
+    if ($result === false) {
+        throw InfoException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
  *
  *
  * @return string Returns the path, as a string.
@@ -282,6 +309,55 @@ function ini_set(string $option, string $value): string
 {
     error_clear_last();
     $result = \ini_set($option, $value);
+    if ($result === false) {
+        throw InfoException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * Check if a php.ini file is loaded, and retrieve its path.
+ *
+ * @return string The loaded php.ini path, or FALSE if one is not loaded.
+ * @throws InfoException
+ *
+ */
+function php_ini_loaded_file(): string
+{
+    error_clear_last();
+    $result = \php_ini_loaded_file();
+    if ($result === false) {
+        throw InfoException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * php_ini_scanned_files returns a comma-separated
+ * list of configuration files parsed after php.ini. The directories
+ * searched are set by a compile time option and, optionally, by an
+ * environment variable at run time: more information can be found in the
+ * installation guide.
+ *
+ * The returned configuration files include the full path.
+ *
+ * @return string Returns a comma-separated string of .ini files on success. Each comma is
+ * followed by a newline. If the configure directive --with-config-file-scan-dir wasn't set and the
+ * PHP_INI_SCAN_DIR environment variable isn't set, FALSE
+ * is returned.  If it was set and the directory was empty, an empty string is
+ * returned.  If a file is unrecognizable, the file will still make it into
+ * the returned string but a PHP error will also result.  This PHP error will
+ * be seen both at compile time and while using
+ * php_ini_scanned_files.
+ * @throws InfoException
+ *
+ */
+function php_ini_scanned_files(): string
+{
+    error_clear_last();
+    $result = \php_ini_scanned_files();
     if ($result === false) {
         throw InfoException::createFromPhpError();
     }

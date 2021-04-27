@@ -102,6 +102,95 @@ function ob_flush(): void
 
 
 /**
+ * Gets the current buffer contents and delete current output buffer.
+ *
+ * ob_get_clean essentially executes both
+ * ob_get_contents and
+ * ob_end_clean.
+ *
+ * The output buffer must be started by
+ * ob_start with PHP_OUTPUT_HANDLER_CLEANABLE
+ * and PHP_OUTPUT_HANDLER_REMOVABLE
+ * flags. Otherwise ob_get_clean will not work.
+ *
+ * @return string Returns the contents of the output buffer and end output buffering.
+ * If output buffering isn't active then FALSE is returned.
+ * @throws OutcontrolException
+ *
+ */
+function ob_get_clean(): string
+{
+    error_clear_last();
+    $result = \ob_get_clean();
+    if ($result === false) {
+        throw OutcontrolException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * Gets the contents of the output buffer without clearing it.
+ *
+ * @return string This will return the contents of the output buffer or FALSE, if output
+ * buffering isn't active.
+ * @throws OutcontrolException
+ *
+ */
+function ob_get_contents(): string
+{
+    error_clear_last();
+    $result = \ob_get_contents();
+    if ($result === false) {
+        throw OutcontrolException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * ob_get_flush flushes the output buffer, return
+ * it as a string and turns off output buffering.
+ *
+ * The output buffer must be started by
+ * ob_start with PHP_OUTPUT_HANDLER_FLUSHABLE
+ * flag. Otherwise ob_get_flush will not work.
+ *
+ * @return string Returns the output buffer or FALSE if no buffering is active.
+ * @throws OutcontrolException
+ *
+ */
+function ob_get_flush(): string
+{
+    error_clear_last();
+    $result = \ob_get_flush();
+    if ($result === false) {
+        throw OutcontrolException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * This will return the length of the contents in the output buffer, in bytes.
+ *
+ * @return int Returns the length of the output buffer contents, in bytes, or FALSE if no
+ * buffering is active.
+ * @throws OutcontrolException
+ *
+ */
+function ob_get_length(): int
+{
+    error_clear_last();
+    $result = \ob_get_length();
+    if ($result === false) {
+        throw OutcontrolException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
  * This function adds another name/value pair to the URL rewrite mechanism.
  * The name and value will be added to URLs (as GET parameter) and forms
  * (as hidden input fields) the same way as the session ID when transparent

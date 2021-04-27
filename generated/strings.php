@@ -154,6 +154,254 @@ function metaphone(string $string, int $max_phonemes = 0): string
 
 
 /**
+ * nl_langinfo is used to access individual elements of
+ * the locale categories.  Unlike localeconv, which
+ * returns all of the elements, nl_langinfo allows you
+ * to select any specific element.
+ *
+ * @param int $item item may be an integer value of the element or the
+ * constant name of the element. The following is a list of constant names
+ * for item that may be used and their description.
+ * Some of these constants may not be defined or hold no value for certain
+ * locales.
+ *
+ * nl_langinfo Constants
+ *
+ *
+ *
+ *
+ *
+ * Constant
+ * Description
+ *
+ *
+ *
+ *
+ * LC_TIME Category Constants
+ *
+ *
+ * ABDAY_(1-7)
+ * Abbreviated name of n-th day of the week.
+ *
+ *
+ * DAY_(1-7)
+ * Name of the n-th day of the week (DAY_1 = Sunday).
+ *
+ *
+ * ABMON_(1-12)
+ * Abbreviated name of the n-th month of the year.
+ *
+ *
+ * MON_(1-12)
+ * Name of the n-th month of the year.
+ *
+ *
+ * AM_STR
+ * String for Ante meridian.
+ *
+ *
+ * PM_STR
+ * String for Post meridian.
+ *
+ *
+ * D_T_FMT
+ * String that can be used as the format string for strftime to represent time and date.
+ *
+ *
+ * D_FMT
+ * String that can be used as the format string for strftime to represent date.
+ *
+ *
+ * T_FMT
+ * String that can be used as the format string for strftime to represent time.
+ *
+ *
+ * T_FMT_AMPM
+ * String that can be used as the format string for strftime to represent time in 12-hour format with ante/post meridian.
+ *
+ *
+ * ERA
+ * Alternate era.
+ *
+ *
+ * ERA_YEAR
+ * Year in alternate era format.
+ *
+ *
+ * ERA_D_T_FMT
+ * Date and time in alternate era format (string can be used in strftime).
+ *
+ *
+ * ERA_D_FMT
+ * Date in alternate era format (string can be used in strftime).
+ *
+ *
+ * ERA_T_FMT
+ * Time in alternate era format (string can be used in strftime).
+ *
+ *
+ * LC_MONETARY Category Constants
+ *
+ *
+ * INT_CURR_SYMBOL
+ * International currency symbol.
+ *
+ *
+ * CURRENCY_SYMBOL
+ * Local currency symbol.
+ *
+ *
+ * CRNCYSTR
+ * Same value as CURRENCY_SYMBOL.
+ *
+ *
+ * MON_DECIMAL_POINT
+ * Decimal point character.
+ *
+ *
+ * MON_THOUSANDS_SEP
+ * Thousands separator (groups of three digits).
+ *
+ *
+ * MON_GROUPING
+ * Like "grouping" element.
+ *
+ *
+ * POSITIVE_SIGN
+ * Sign for positive values.
+ *
+ *
+ * NEGATIVE_SIGN
+ * Sign for negative values.
+ *
+ *
+ * INT_FRAC_DIGITS
+ * International fractional digits.
+ *
+ *
+ * FRAC_DIGITS
+ * Local fractional digits.
+ *
+ *
+ * P_CS_PRECEDES
+ * Returns 1 if CURRENCY_SYMBOL precedes a positive value.
+ *
+ *
+ * P_SEP_BY_SPACE
+ * Returns 1 if a space separates CURRENCY_SYMBOL from a positive value.
+ *
+ *
+ * N_CS_PRECEDES
+ * Returns 1 if CURRENCY_SYMBOL precedes a negative value.
+ *
+ *
+ * N_SEP_BY_SPACE
+ * Returns 1 if a space separates CURRENCY_SYMBOL from a negative value.
+ *
+ *
+ * P_SIGN_POSN
+ *
+ *
+ *
+ *
+ * Returns 0 if parentheses surround the quantity and CURRENCY_SYMBOL.
+ *
+ *
+ *
+ *
+ * Returns 1 if the sign string precedes the quantity and CURRENCY_SYMBOL.
+ *
+ *
+ *
+ *
+ * Returns 2 if the sign string follows the quantity and CURRENCY_SYMBOL.
+ *
+ *
+ *
+ *
+ * Returns 3 if the sign string immediately precedes the CURRENCY_SYMBOL.
+ *
+ *
+ *
+ *
+ * Returns 4 if the sign string immediately follows the CURRENCY_SYMBOL.
+ *
+ *
+ *
+ *
+ *
+ *
+ * N_SIGN_POSN
+ *
+ *
+ * LC_NUMERIC Category Constants
+ *
+ *
+ * DECIMAL_POINT
+ * Decimal point character.
+ *
+ *
+ * RADIXCHAR
+ * Same value as DECIMAL_POINT.
+ *
+ *
+ * THOUSANDS_SEP
+ * Separator character for thousands (groups of three digits).
+ *
+ *
+ * THOUSEP
+ * Same value as THOUSANDS_SEP.
+ *
+ *
+ * GROUPING
+ *
+ *
+ *
+ * LC_MESSAGES Category Constants
+ *
+ *
+ * YESEXPR
+ * Regex string for matching "yes" input.
+ *
+ *
+ * NOEXPR
+ * Regex string for matching "no" input.
+ *
+ *
+ * YESSTR
+ * Output string for "yes".
+ *
+ *
+ * NOSTR
+ * Output string for "no".
+ *
+ *
+ * LC_CTYPE Category Constants
+ *
+ *
+ * CODESET
+ * Return a string with the name of the character encoding.
+ *
+ *
+ *
+ *
+ * @return string Returns the element as a string, or FALSE if item
+ * is not valid.
+ * @throws StringsException
+ *
+ */
+function nl_langinfo(int $item): string
+{
+    error_clear_last();
+    $result = \nl_langinfo($item);
+    if ($result === false) {
+        throw StringsException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
  *
  *
  * @param string $filename The filename of the file to hash.
@@ -487,6 +735,124 @@ function sprintf(string $format, ...$values): string
     } else {
         $result = \sprintf($format);
     }
+    if ($result === false) {
+        throw StringsException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * Returns all of haystack starting from and including the first
+ * occurrence of needle to the end.
+ *
+ * @param string $haystack The string to search in
+ * @param mixed $needle
+ * Prior to PHP 8.0.0, if needle is not a string, it is converted
+ * to an integer and applied as the ordinal value of a character.
+ * This behavior is deprecated as of PHP 7.3.0, and relying on it is highly
+ * discouraged. Depending on the intended behavior, the
+ * needle should either be explicitly cast to string,
+ * or an explicit call to chr should be performed.
+ * @param bool $before_needle If TRUE, stristr
+ * returns the part of the haystack before the
+ * first occurrence of the needle (excluding needle).
+ * @return string Returns the matched substring. If needle is not
+ * found, returns FALSE.
+ * @throws StringsException
+ *
+ */
+function stristr(string $haystack, $needle, bool $before_needle = false): string
+{
+    error_clear_last();
+    $result = \stristr($haystack, $needle, $before_needle);
+    if ($result === false) {
+        throw StringsException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * strpbrk searches the string
+ * string for a characters.
+ *
+ * @param string $string The string where characters is looked for.
+ * @param string $characters This parameter is case sensitive.
+ * @return string Returns a string starting from the character found, or FALSE if it is
+ * not found.
+ * @throws StringsException
+ *
+ */
+function strpbrk(string $string, string $characters): string
+{
+    error_clear_last();
+    $result = \strpbrk($string, $characters);
+    if ($result === false) {
+        throw StringsException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * This function returns the portion of haystack which
+ * starts at the last occurrence of needle and goes
+ * until the end of haystack.
+ *
+ * @param string $haystack The string to search in
+ * @param mixed $needle If needle contains more than one character,
+ * only the first is used. This behavior is different from that of
+ * strstr.
+ *
+ *
+ * Prior to PHP 8.0.0, if needle is not a string, it is converted
+ * to an integer and applied as the ordinal value of a character.
+ * This behavior is deprecated as of PHP 7.3.0, and relying on it is highly
+ * discouraged. Depending on the intended behavior, the
+ * needle should either be explicitly cast to string,
+ * or an explicit call to chr should be performed.
+ * @return string This function returns the portion of string, or FALSE if
+ * needle is not found.
+ * @throws StringsException
+ *
+ */
+function strrchr(string $haystack, $needle): string
+{
+    error_clear_last();
+    $result = \strrchr($haystack, $needle);
+    if ($result === false) {
+        throw StringsException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * Returns part of haystack string starting from and including the first
+ * occurrence of needle to the end of
+ * haystack.
+ *
+ * @param string $haystack The input string.
+ * @param mixed $needle
+ * Prior to PHP 8.0.0, if needle is not a string, it is converted
+ * to an integer and applied as the ordinal value of a character.
+ * This behavior is deprecated as of PHP 7.3.0, and relying on it is highly
+ * discouraged. Depending on the intended behavior, the
+ * needle should either be explicitly cast to string,
+ * or an explicit call to chr should be performed.
+ * @param bool $before_needle If TRUE, strstr returns
+ * the part of the haystack before the first
+ * occurrence of the needle (excluding the needle).
+ * @return string Returns the portion of string, or FALSE if needle
+ * is not found.
+ * @throws StringsException
+ *
+ */
+function strstr(string $haystack, $needle, bool $before_needle = false): string
+{
+    error_clear_last();
+    $result = \strstr($haystack, $needle, $before_needle);
     if ($result === false) {
         throw StringsException::createFromPhpError();
     }

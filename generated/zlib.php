@@ -291,6 +291,27 @@ function gzfile(string $filename, int $use_include_path = 0): array
 
 
 /**
+ * Returns a string containing a single (uncompressed) character
+ * read from the given gz-file pointer.
+ *
+ * @param resource $stream The gz-file pointer. It must be valid, and must point to a file
+ * successfully opened by gzopen.
+ * @return string The uncompressed character or FALSE on EOF (unlike gzeof).
+ * @throws ZlibException
+ *
+ */
+function gzgetc($stream): string
+{
+    error_clear_last();
+    $result = \gzgetc($stream);
+    if ($result === false) {
+        throw ZlibException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
  * Gets a (uncompressed) string of up to length - 1 bytes read from the given
  * file pointer. Reading ends when length - 1 bytes have been read, on a
  * newline, or on EOF (whichever comes first).
@@ -371,6 +392,43 @@ function gzinflate(string $data, int $max_length = 0): string
 
 
 /**
+ * Opens a gzip (.gz) file for reading or writing.
+ *
+ * gzopen can be used to read a file which is
+ * not in gzip format; in this case gzread will
+ * directly read from the file without decompression.
+ *
+ * @param string $filename The file name.
+ * @param string $mode As in fopen (rb or
+ * wb) but can also include a compression level
+ * (wb9) or a strategy: f for
+ * filtered data as in wb6f, h for
+ * Huffman only compression as in wb1h.
+ * (See the description of deflateInit2
+ * in zlib.h for
+ * more information about the strategy parameter.)
+ * @param int $use_include_path You can set this optional parameter to 1, if you
+ * want to search for the file in the include_path too.
+ * @return resource Returns a file pointer to the file opened, after that, everything you read
+ * from this file descriptor will be transparently decompressed and what you
+ * write gets compressed.
+ *
+ * If the open fails, the function returns FALSE.
+ * @throws ZlibException
+ *
+ */
+function gzopen(string $filename, string $mode, int $use_include_path = 0)
+{
+    error_clear_last();
+    $result = \gzopen($filename, $mode, $use_include_path);
+    if ($result === false) {
+        throw ZlibException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
  * Reads to EOF on the given gz-file pointer from the current position and
  * writes the (uncompressed) results to standard output.
  *
@@ -432,6 +490,27 @@ function gzrewind($stream): void
     if ($result === false) {
         throw ZlibException::createFromPhpError();
     }
+}
+
+
+/**
+ * Gets the position of the given file pointer; i.e., its offset into the
+ * uncompressed file stream.
+ *
+ * @param resource $stream The gz-file pointer. It must be valid, and must point to a file
+ * successfully opened by gzopen.
+ * @return int The position of the file pointer or FALSE if an error occurs.
+ * @throws ZlibException
+ *
+ */
+function gztell($stream): int
+{
+    error_clear_last();
+    $result = \gztell($stream);
+    if ($result === false) {
+        throw ZlibException::createFromPhpError();
+    }
+    return $result;
 }
 
 
@@ -686,6 +765,48 @@ function zlib_decode(string $data, int $max_length = 0): string
 {
     error_clear_last();
     $result = \zlib_decode($data, $max_length);
+    if ($result === false) {
+        throw ZlibException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * Compress data with the specified encoding.
+ *
+ * @param string $data The data to compress.
+ * @param int $encoding The compression algorithm. Either ZLIB_ENCODING_RAW,
+ * ZLIB_ENCODING_DEFLATE or
+ * ZLIB_ENCODING_GZIP.
+ * @param string|int $level
+ * @return string
+ * @throws ZlibException
+ *
+ */
+function zlib_encode(string $data, int $encoding, $level = -1): string
+{
+    error_clear_last();
+    $result = \zlib_encode($data, $encoding, $level);
+    if ($result === false) {
+        throw ZlibException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * Returns the coding type used for output compression.
+ *
+ * @return string Possible return values are gzip, deflate,
+ * or FALSE.
+ * @throws ZlibException
+ *
+ */
+function zlib_get_coding_type(): string
+{
+    error_clear_last();
+    $result = \zlib_get_coding_type();
     if ($result === false) {
         throw ZlibException::createFromPhpError();
     }

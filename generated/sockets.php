@@ -517,6 +517,166 @@ function socket_read($socket, int $length, int $mode = PHP_BINARY_READ): string
 
 
 /**
+ * The socket_recv function receives
+ * length bytes of data in data from
+ * socket. socket_recv can
+ * be used to gather data from connected sockets. Additionally, one or
+ * more flags can be specified to modify the behaviour of the
+ * function.
+ *
+ * data is passed by reference, so it must be
+ * specified as a variable in the argument list. Data read from
+ * socket by socket_recv
+ * will be returned in data.
+ *
+ * @param resource $socket The socket must be a Socket instance previously
+ * created by socket_create().
+ * @param string|null $data The data received will be fetched to the variable specified with
+ * data. If an error occurs, if the
+ * connection is reset, or if no data is
+ * available, data will be set to NULL.
+ * @param int $length Up to length bytes will be fetched from remote host.
+ * @param int $flags The value of flags can be any combination of
+ * the following flags, joined with the binary OR (|)
+ * operator.
+ * @return int socket_recv returns the number of bytes received,
+ * or FALSE if there was an error. The actual error code can be retrieved by
+ * calling socket_last_error. This error code may be
+ * passed to socket_strerror to get a textual explanation
+ * of the error.
+ * @throws SocketsException
+ *
+ */
+function socket_recv($socket, ?string &$data, int $length, int $flags): int
+{
+    error_clear_last();
+    $result = \socket_recv($socket, $data, $length, $flags);
+    if ($result === false) {
+        throw SocketsException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * The socket_recvfrom function receives
+ * length bytes of data in data from
+ * address on port port (if the
+ * socket is not of type AF_UNIX) using
+ * socket. socket_recvfrom can be
+ * used to gather data from both connected and unconnected sockets.
+ * Additionally, one or more flags can be specified to modify the behaviour of
+ * the function.
+ *
+ * The address and port must be
+ * passed by reference. If the socket is not connection-oriented,
+ * address will be set to the internet protocol address of
+ * the remote host or the path to the UNIX socket. If the socket is
+ * connection-oriented, address is NULL. Additionally,
+ * the port will contain the port of the remote host in
+ * the case of an unconnected AF_INET or
+ * AF_INET6 socket.
+ *
+ * @param resource $socket The socket must be a Socket instance previously
+ * created by socket_create().
+ * @param string|null $data The data received will be fetched to the variable specified with
+ * data.
+ * @param int $length Up to length bytes will be fetched from remote host.
+ * @param int $flags The value of flags can be any combination of
+ * the following flags, joined with the binary OR (|)
+ * operator.
+ * @param string|null $address If the socket is of the type AF_UNIX type,
+ * address is the path to the file. Else, for
+ * unconnected sockets, address is the IP address of,
+ * the remote host, or NULL if the socket is connection-oriented.
+ * @param int|null $port This argument only applies to AF_INET and
+ * AF_INET6 sockets, and specifies the remote port
+ * from which the data is received. If the socket is connection-oriented,
+ * port will be NULL.
+ * @return int socket_recvfrom returns the number of bytes received,
+ * or FALSE if there was an error. The actual error code can be retrieved by
+ * calling socket_last_error. This error code may be
+ * passed to socket_strerror to get a textual explanation
+ * of the error.
+ * @throws SocketsException
+ *
+ */
+function socket_recvfrom($socket, ?string &$data, int $length, int $flags, ?string &$address, ?int &$port = null): int
+{
+    error_clear_last();
+    $result = \socket_recvfrom($socket, $data, $length, $flags, $address, $port);
+    if ($result === false) {
+        throw SocketsException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ *
+ *
+ * @param resource $socket
+ * @param string|null $message
+ * @param int $flags
+ * @return int
+ * @throws SocketsException
+ *
+ */
+function socket_recvmsg($socket, ?string &$message, int $flags = 0): int
+{
+    error_clear_last();
+    $result = \socket_recvmsg($socket, $message, $flags);
+    if ($result === false) {
+        throw SocketsException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * socket_select accepts arrays of sockets and waits for
+ * them to change status. Those coming with BSD sockets background will
+ * recognize that those socket arrays are in fact the so-called file
+ * descriptor sets. Three independent arrays of sockets are watched.
+ *
+ * @param resource[]|null $read The sockets listed in the read array will be
+ * watched to see if characters become available for reading (more
+ * precisely, to see if a read will not block - in particular, a socket
+ * is also ready on end-of-file, in which case a
+ * socket_read will return a zero length string).
+ * @param resource[]|null $write The sockets listed in the write array will be
+ * watched to see if a write will not block.
+ * @param resource[]|null $except The sockets listed in the except array will be
+ * watched for exceptions.
+ * @param int|null $seconds The seconds and microseconds
+ * together form the timeout parameter. The
+ * timeout is an upper bound on the amount of time
+ * elapsed before socket_select return.
+ * seconds may be zero , causing
+ * socket_select to return immediately. This is useful
+ * for polling. If seconds is NULL (no timeout),
+ * socket_select can block indefinitely.
+ * @param int|null $microseconds
+ * @return int On success socket_select returns the number of
+ * sockets contained in the modified arrays, which may be zero if
+ * the timeout expires before anything interesting happens.On error FALSE
+ * is returned. The error code can be retrieved with
+ * socket_last_error.
+ * @throws SocketsException
+ *
+ */
+function socket_select(?iterable &$read, ?iterable &$write, ?iterable &$except, ?int $seconds, ?int $microseconds = 0): int
+{
+    error_clear_last();
+    $result = \socket_select($read, $write, $except, $seconds, $microseconds);
+    if ($result === false) {
+        throw SocketsException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
  * The function socket_send sends
  * length bytes to the socket
  * socket from data.

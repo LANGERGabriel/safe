@@ -323,6 +323,76 @@ function pspell_new_config(int $config): int
 
 
 /**
+ * For more information and examples, check out inline manual pspell
+ * website:http://aspell.net/.
+ *
+ * @param string $filename The file where words added to the personal list will be stored.
+ * It should be an absolute filename beginning with '/' because otherwise
+ * it will be relative to $HOME, which is "/root" for most systems, and
+ * is probably not what you want.
+ * @param string $language The language code which consists of the two letter ISO 639 language
+ * code and an optional two letter ISO 3166 country code after a dash
+ * or underscore.
+ * @param string $spelling The requested spelling for languages with more than one spelling such
+ * as English. Known values are 'american', 'british', and 'canadian'.
+ * @param string $jargon Extra information to distinguish two different words lists that have
+ * the same language and spelling parameters.
+ * @param string $encoding The encoding that words are expected to be in.  Valid values are
+ * utf-8, iso8859-*,
+ * koi8-r, viscii,
+ * cp1252, machine unsigned 16,
+ * machine unsigned 32.
+ * @param int $mode The mode in which spellchecker will work. There are several modes available:
+ *
+ *
+ *
+ * PSPELL_FAST - Fast mode (least number of
+ * suggestions)
+ *
+ *
+ *
+ *
+ * PSPELL_NORMAL - Normal mode (more suggestions)
+ *
+ *
+ *
+ *
+ * PSPELL_BAD_SPELLERS - Slow mode (a lot of
+ * suggestions)
+ *
+ *
+ *
+ *
+ * PSPELL_RUN_TOGETHER - Consider run-together words
+ * as legal compounds.  That is, "thecat" will be a legal compound,
+ * although there should be a space between the two words. Changing this
+ * setting only affects the results returned by
+ * pspell_check; pspell_suggest
+ * will still return suggestions.
+ *
+ *
+ *
+ * Mode is a bitmask constructed from different constants listed above.
+ * However, PSPELL_FAST,
+ * PSPELL_NORMAL and
+ * PSPELL_BAD_SPELLERS are mutually exclusive, so you
+ * should select only one of them.
+ * @return int Returns the dictionary link identifier for use in other pspell functions.
+ * @throws PspellException
+ *
+ */
+function pspell_new_personal(string $filename, string $language, string $spelling = "", string $jargon = "", string $encoding = "", int $mode = 0): int
+{
+    error_clear_last();
+    $result = \pspell_new_personal($filename, $language, $spelling, $jargon, $encoding, $mode);
+    if ($result === false) {
+        throw PspellException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
  * pspell_new opens up a new dictionary and
  * returns the dictionary link identifier for use in other pspell
  * functions.
@@ -430,4 +500,24 @@ function pspell_store_replacement(int $dictionary, string $misspelled, string $c
     if ($result === false) {
         throw PspellException::createFromPhpError();
     }
+}
+
+
+/**
+ *
+ *
+ * @param int $dictionary
+ * @param string $word The tested word.
+ * @return array Returns an array of possible spellings.
+ * @throws PspellException
+ *
+ */
+function pspell_suggest(int $dictionary, string $word): array
+{
+    error_clear_last();
+    $result = \pspell_suggest($dictionary, $word);
+    if ($result === false) {
+        throw PspellException::createFromPhpError();
+    }
+    return $result;
 }

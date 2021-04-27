@@ -3157,3 +3157,69 @@ function curl_unescape($handle, string $string): string
     }
     return $result;
 }
+
+
+/**
+ * Returns information about the cURL version.
+ *
+ * @return array Returns an associative array with the following elements:
+ *
+ *
+ *
+ *
+ * Key
+ * Value description
+ *
+ *
+ *
+ *
+ * version_number
+ * cURL 24 bit version number
+ *
+ *
+ * version
+ * cURL version number, as a string
+ *
+ *
+ * ssl_version_number
+ * OpenSSL 24 bit version number
+ *
+ *
+ * ssl_version
+ * OpenSSL version number, as a string
+ *
+ *
+ * libz_version
+ * zlib version number, as a string
+ *
+ *
+ * host
+ * Information about the host where cURL was built
+ *
+ *
+ * age
+ *
+ *
+ *
+ * features
+ * A bitmask of the CURL_VERSION_XXX constants
+ *
+ *
+ * protocols
+ * An array of protocols names supported by cURL
+ *
+ *
+ *
+ *
+ * @throws CurlException
+ *
+ */
+function curl_version(): array
+{
+    error_clear_last();
+    $result = \curl_version();
+    if ($result === false) {
+        throw CurlException::createFromPhpError();
+    }
+    return $result;
+}

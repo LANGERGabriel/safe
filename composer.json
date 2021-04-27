@@ -30,6 +30,7 @@
             "generated/eio.php",
             "generated/errorfunc.php",
             "generated/exec.php",
+            "generated/exif.php",
             "generated/fileinfo.php",
             "generated/filesystem.php",
             "generated/filter.php",
@@ -79,6 +80,7 @@
             "generated/shmop.php",
             "generated/simplexml.php",
             "generated/sockets.php",
+            "generated/sodium.php",
             "generated/solr.php",
             "generated/spl.php",
             "generated/sqlsrv.php",
@@ -106,7 +108,9 @@
     "require-dev": {
         "phpstan/phpstan": "^0.12",
         "thecodingmachine/phpstan-strict-rules": "^0.12",
-        "squizlabs/php_codesniffer": "^3.2"
+        "squizlabs/php_codesniffer": "^3.2",
+        "ext-simplexml": "*",
+        "ext-libxml": "*"
     },
     "scripts": {
         "phpstan": "phpstan analyse lib -c phpstan.neon --level=max --no-progress -vvv",

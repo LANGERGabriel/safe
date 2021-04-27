@@ -412,6 +412,34 @@ function ftp_pwd($ftp): string
 
 
 /**
+ * ftp_rawlist executes the FTP
+ * LIST command, and returns the result as an array.
+ *
+ * @param resource $ftp The link identifier of the FTP connection.
+ * @param string $directory The directory path. May include arguments for the LIST
+ * command.
+ * @param bool $recursive If set to TRUE, the issued command will be LIST -R.
+ * @return array Returns an array where each element corresponds to one line of text. Returns
+ * FALSE when passed directory is invalid.
+ *
+ * The output is not parsed in any way. The system type identifier returned by
+ * ftp_systype can be used to determine how the results
+ * should be interpreted.
+ * @throws FtpException
+ *
+ */
+function ftp_rawlist($ftp, string $directory, bool $recursive = false): array
+{
+    error_clear_last();
+    $result = \ftp_rawlist($ftp, $directory, $recursive);
+    if ($result === false) {
+        throw FtpException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
  * ftp_rename renames a file or a directory on the FTP
  * server.
  *

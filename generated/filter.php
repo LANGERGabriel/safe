@@ -5,6 +5,25 @@ namespace Safe;
 use Safe\Exceptions\FilterException;
 
 /**
+ *
+ *
+ * @param string $name Name of a filter to get.
+ * @return int ID of a filter on success or FALSE if filter doesn't exist.
+ * @throws FilterException
+ *
+ */
+function filter_id(string $name): int
+{
+    error_clear_last();
+    $result = \filter_id($name);
+    if ($result === false) {
+        throw FilterException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
  * This function is useful for retrieving many values without
  * repetitively calling filter_input.
  *

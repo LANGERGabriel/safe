@@ -65,6 +65,78 @@ function mb_convert_encoding($string, string $to_encoding, $from_encoding = null
 
 
 /**
+ * Converts
+ * character encoding of variables var and vars in
+ * encoding from_encoding to encoding
+ * to_encoding.
+ *
+ * mb_convert_variables join strings in Array
+ * or Object to detect encoding, since encoding detection tends to
+ * fail for short strings. Therefore, it is impossible to mix
+ * encoding in single array or object.
+ *
+ * @param string $to_encoding The encoding that the string is being converted to.
+ * @param array|string $from_encoding from_encoding is specified as an array
+ * or comma separated string, it tries to detect encoding from
+ * from-coding. When from_encoding
+ * is omitted, detect_order is used.
+ * @param string|array|object $var var is the reference to the
+ * variable being converted. String, Array and Object are accepted.
+ * mb_convert_variables assumes all parameters
+ * have the same encoding.
+ * @param string|array|object $vars Additional vars.
+ * @return string The character encoding before conversion for success,
+ * or FALSE for failure.
+ * @throws MbstringException
+ *
+ */
+function mb_convert_variables(string $to_encoding, $from_encoding, &$var, ...$vars): string
+{
+    error_clear_last();
+    $result = \mb_convert_variables($to_encoding, $from_encoding, $var, ...$vars);
+    if ($result === false) {
+        throw MbstringException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * Detects character encoding in string string.
+ *
+ * @param string $string The string being detected.
+ * @param mixed $encodings encodings is list of character
+ * encoding. Encoding order may be specified by array or comma
+ * separated list string.
+ *
+ * If encodings is omitted or NULL,
+ * detect_order is used.
+ * @param bool $strict strict specifies whether to use
+ * the strict encoding detection or not.
+ * Default is FALSE.
+ * @return string The detected character encoding or FALSE if the encoding cannot be
+ * detected from the given string.
+ * @throws MbstringException
+ *
+ */
+function mb_detect_encoding(string $string, $encodings = null, bool $strict = false): string
+{
+    error_clear_last();
+    if ($strict !== false) {
+        $result = \mb_detect_encoding($string, $encodings, $strict);
+    } elseif ($encodings !== null) {
+        $result = \mb_detect_encoding($string, $encodings);
+    } else {
+        $result = \mb_detect_encoding($string);
+    }
+    if ($result === false) {
+        throw MbstringException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
  * Sets the automatic character
  * encoding detection order to encoding.
  *
@@ -255,6 +327,37 @@ function mb_ereg_search_init(string $string, string $pattern = null, string $opt
 
 
 /**
+ * Returns position and length of a matched part of the multibyte regular expression
+ * for a predefined multibyte string
+ *
+ * The string for match is specified by
+ * mb_ereg_search_init. If it is not specified,
+ * the previous one will be used.
+ *
+ * @param string $pattern The search pattern.
+ * @param string $options The search option. See mb_regex_set_options for explanation.
+ * @return array
+ * @throws MbstringException
+ *
+ */
+function mb_ereg_search_pos(string $pattern = null, string $options = null): array
+{
+    error_clear_last();
+    if ($options !== null) {
+        $result = \mb_ereg_search_pos($pattern, $options);
+    } elseif ($pattern !== null) {
+        $result = \mb_ereg_search_pos($pattern);
+    } else {
+        $result = \mb_ereg_search_pos();
+    }
+    if ($result === false) {
+        throw MbstringException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
  * Returns the matched part of a multibyte regular expression.
  *
  * @param string $pattern The search pattern.
@@ -356,6 +459,35 @@ function mb_get_info(string $type = "all")
 {
     error_clear_last();
     $result = \mb_get_info($type);
+    if ($result === false) {
+        throw MbstringException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ *
+ *
+ * @param string $type Input string specifies the input type.
+ * "G" for GET, "P" for POST, "C" for COOKIE, "S" for string, "L" for list, and
+ * "I" for the whole list (will return array).
+ * If type is omitted, it returns the last input type processed.
+ * @return mixed The character encoding name, as per the type,
+ * or an array of character encoding names, if type is "I".
+ * If mb_http_input does not process specified
+ * HTTP input, it returns FALSE.
+ * @throws MbstringException
+ *
+ */
+function mb_http_input(string $type = null)
+{
+    error_clear_last();
+    if ($type !== null) {
+        $result = \mb_http_input($type);
+    } else {
+        $result = \mb_http_input();
+    }
     if ($result === false) {
         throw MbstringException::createFromPhpError();
     }
@@ -471,6 +603,27 @@ function mb_parse_str(string $string, ?array &$result): void
     if ($result === false) {
         throw MbstringException::createFromPhpError();
     }
+}
+
+
+/**
+ * Get a MIME charset string for a specific encoding.
+ *
+ * @param string $encoding The encoding being checked.
+ * @return string The MIME charset string for character encoding
+ * encoding,
+ * or FALSE if no charset is preferred for the given encoding.
+ * @throws MbstringException
+ *
+ */
+function mb_preferred_mime_name(string $encoding): string
+{
+    error_clear_last();
+    $result = \mb_preferred_mime_name($encoding);
+    if ($result === false) {
+        throw MbstringException::createFromPhpError();
+    }
+    return $result;
 }
 
 
@@ -614,6 +767,310 @@ function mb_str_split(string $string, int $length = 1, $encoding = null): array
         $result = \mb_str_split($string, $length, $encoding);
     } else {
         $result = \mb_str_split($string, $length);
+    }
+    if ($result === false) {
+        throw MbstringException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * mb_stripos returns the numeric position of
+ * the first occurrence of needle in the
+ * haystack string.
+ * Unlike mb_strpos,
+ * mb_stripos is case-insensitive.
+ * If needle is not found, it returns FALSE.
+ *
+ * @param string $haystack The string from which to get the position of the first occurrence
+ * of needle
+ * @param string $needle The string to find in haystack
+ * @param int $offset The position in haystack
+ * to start searching.
+ * A negative offset counts from the end of the string.
+ * @param string $encoding Character encoding name to use.
+ * If it is omitted, internal character encoding is used.
+ * @return int Return the numeric position of the first occurrence of
+ * needle in the haystack
+ * string, or FALSE if needle is not found.
+ * @throws MbstringException
+ *
+ */
+function mb_stripos(string $haystack, string $needle, int $offset = 0, string $encoding = null): int
+{
+    error_clear_last();
+    if ($encoding !== null) {
+        $result = \mb_stripos($haystack, $needle, $offset, $encoding);
+    } else {
+        $result = \mb_stripos($haystack, $needle, $offset);
+    }
+    if ($result === false) {
+        throw MbstringException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * mb_stristr finds the first occurrence of
+ * needle in haystack
+ * and returns the portion of haystack.
+ * Unlike mb_strstr,
+ * mb_stristr is case-insensitive.
+ * If needle is not found, it returns FALSE.
+ *
+ * @param string $haystack The string from which to get the first occurrence
+ * of needle
+ * @param string $needle The string to find in haystack
+ * @param bool $before_needle Determines which portion of haystack
+ * this function returns.
+ * If set to TRUE, it returns all of  haystack
+ * from the beginning to the first occurrence of needle (excluding needle).
+ * If set to FALSE, it returns all of haystack
+ * from the first occurrence of needle to the end (including needle).
+ * @param string $encoding Character encoding name to use.
+ * If it is omitted, internal character encoding is used.
+ * @return string Returns the portion of haystack,
+ * or FALSE if needle is not found.
+ * @throws MbstringException
+ *
+ */
+function mb_stristr(string $haystack, string $needle, bool $before_needle = false, string $encoding = null): string
+{
+    error_clear_last();
+    if ($encoding !== null) {
+        $result = \mb_stristr($haystack, $needle, $before_needle, $encoding);
+    } else {
+        $result = \mb_stristr($haystack, $needle, $before_needle);
+    }
+    if ($result === false) {
+        throw MbstringException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * Finds position of the first occurrence of a string in a string.
+ *
+ * Performs a multi-byte safe
+ * strpos operation based on number of
+ * characters. The first character's position is 0, the second character
+ * position is 1, and so on.
+ *
+ * @param string $haystack The string being checked.
+ * @param string $needle The string to find in haystack. In contrast
+ * with strpos, numeric values are not applied
+ * as the ordinal value of a character.
+ * @param int $offset The search offset. If it is not specified, 0 is used.
+ * A negative offset counts from the end of the string.
+ * @param string $encoding The encoding
+ * parameter is the character encoding. If it is omitted or NULL, the internal character
+ * encoding value will be used.
+ * @return int Returns the numeric position of
+ * the first occurrence of needle in the
+ * haystack string. If
+ * needle is not found, it returns FALSE.
+ * @throws MbstringException
+ *
+ */
+function mb_strpos(string $haystack, string $needle, int $offset = 0, string $encoding = null): int
+{
+    error_clear_last();
+    if ($encoding !== null) {
+        $result = \mb_strpos($haystack, $needle, $offset, $encoding);
+    } else {
+        $result = \mb_strpos($haystack, $needle, $offset);
+    }
+    if ($result === false) {
+        throw MbstringException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * mb_strrchr finds the last occurrence of
+ * needle in haystack
+ * and returns the portion of haystack.
+ * If needle is not found, it returns FALSE.
+ *
+ * @param string $haystack The string from which to get the last occurrence
+ * of needle
+ * @param string $needle The string to find in haystack
+ * @param bool $before_needle Determines which portion of haystack
+ * this function returns.
+ * If set to TRUE, it returns all of haystack
+ * from the beginning to the last occurrence of needle.
+ * If set to FALSE, it returns all of haystack
+ * from the last occurrence of needle to the end,
+ * @param string $encoding Character encoding name to use.
+ * If it is omitted, internal character encoding is used.
+ * @return string Returns the portion of haystack.
+ * or FALSE if needle is not found.
+ * @throws MbstringException
+ *
+ */
+function mb_strrchr(string $haystack, string $needle, bool $before_needle = false, string $encoding = null): string
+{
+    error_clear_last();
+    if ($encoding !== null) {
+        $result = \mb_strrchr($haystack, $needle, $before_needle, $encoding);
+    } else {
+        $result = \mb_strrchr($haystack, $needle, $before_needle);
+    }
+    if ($result === false) {
+        throw MbstringException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * mb_strrichr finds the last occurrence of
+ * needle in haystack
+ * and returns the portion of haystack. Unlike
+ * mb_strrchr, mb_strrichr is
+ * case-insensitive.
+ * If needle is not found, it returns FALSE.
+ *
+ * @param string $haystack The string from which to get the last occurrence
+ * of needle
+ * @param string $needle The string to find in haystack
+ * @param bool $before_needle Determines which portion of haystack
+ * this function returns.
+ * If set to TRUE, it returns all of haystack
+ * from the beginning to the last occurrence of needle.
+ * If set to FALSE, it returns all of haystack
+ * from the last occurrence of needle to the end,
+ * @param string $encoding Character encoding name to use.
+ * If it is omitted, internal character encoding is used.
+ * @return string Returns the portion of haystack.
+ * or FALSE if needle is not found.
+ * @throws MbstringException
+ *
+ */
+function mb_strrichr(string $haystack, string $needle, bool $before_needle = false, string $encoding = null): string
+{
+    error_clear_last();
+    if ($encoding !== null) {
+        $result = \mb_strrichr($haystack, $needle, $before_needle, $encoding);
+    } else {
+        $result = \mb_strrichr($haystack, $needle, $before_needle);
+    }
+    if ($result === false) {
+        throw MbstringException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * mb_strripos performs multi-byte safe
+ * strripos operation based on
+ * number of characters. needle position is
+ * counted from the beginning of
+ * haystack. First character's position is
+ * 0. Second character position is 1.
+ * Unlike mb_strrpos,
+ * mb_strripos is case-insensitive.
+ *
+ * @param string $haystack The string from which to get the position of the last occurrence
+ * of needle
+ * @param string $needle The string to find in haystack
+ * @param int $offset The position in haystack
+ * to start searching
+ * @param string $encoding Character encoding name to use.
+ * If it is omitted, internal character encoding is used.
+ * @return int Return the numeric position of
+ * the last occurrence of needle in the
+ * haystack string, or FALSE
+ * if needle is not found.
+ * @throws MbstringException
+ *
+ */
+function mb_strripos(string $haystack, string $needle, int $offset = 0, string $encoding = null): int
+{
+    error_clear_last();
+    if ($encoding !== null) {
+        $result = \mb_strripos($haystack, $needle, $offset, $encoding);
+    } else {
+        $result = \mb_strripos($haystack, $needle, $offset);
+    }
+    if ($result === false) {
+        throw MbstringException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * Performs a multibyte safe
+ * strrpos operation based on the
+ * number of characters. needle position is
+ * counted from the beginning of
+ * haystack. First character's position is
+ * 0. Second character position is 1.
+ *
+ * @param string $haystack The string being checked, for the last occurrence
+ * of needle
+ * @param string $needle The string to find in haystack.
+ * @param int $offset
+ * @param string $encoding The encoding
+ * parameter is the character encoding. If it is omitted or NULL, the internal character
+ * encoding value will be used.
+ * @return int Returns the numeric position of
+ * the last occurrence of needle in the
+ * haystack string. If
+ * needle is not found, it returns FALSE.
+ * @throws MbstringException
+ *
+ */
+function mb_strrpos(string $haystack, string $needle, int $offset = 0, string $encoding = null): int
+{
+    error_clear_last();
+    if ($encoding !== null) {
+        $result = \mb_strrpos($haystack, $needle, $offset, $encoding);
+    } else {
+        $result = \mb_strrpos($haystack, $needle, $offset);
+    }
+    if ($result === false) {
+        throw MbstringException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * mb_strstr finds the first occurrence of
+ * needle in haystack
+ * and returns the portion of haystack.
+ * If needle is not found, it returns FALSE.
+ *
+ * @param string $haystack The string from which to get the first occurrence
+ * of needle
+ * @param string $needle The string to find in haystack
+ * @param bool $before_needle Determines which portion of haystack
+ * this function returns.
+ * If set to TRUE, it returns all of  haystack
+ * from the beginning to the first occurrence of needle (excluding needle).
+ * If set to FALSE, it returns all of haystack
+ * from the first occurrence of needle to the end (including needle).
+ * @param string $encoding Character encoding name to use.
+ * If it is omitted, internal character encoding is used.
+ * @return string Returns the portion of haystack,
+ * or FALSE if needle is not found.
+ * @throws MbstringException
+ *
+ */
+function mb_strstr(string $haystack, string $needle, bool $before_needle = false, string $encoding = null): string
+{
+    error_clear_last();
+    if ($encoding !== null) {
+        $result = \mb_strstr($haystack, $needle, $before_needle, $encoding);
+    } else {
+        $result = \mb_strstr($haystack, $needle, $before_needle);
     }
     if ($result === false) {
         throw MbstringException::createFromPhpError();

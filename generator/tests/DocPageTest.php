@@ -18,6 +18,9 @@ class DocPageTest extends TestCase
         $arrayReplace = new DocPage(__DIR__ . '/../doc/doc-en/en/reference/array/functions/array-replace.xml');
         $mktime = new DocPage(__DIR__ . '/../doc/doc-en/en/reference/datetime/functions/mktime.xml');
         $date = new DocPage(__DIR__ . '/../doc/doc-en/en/reference/datetime/functions/date.xml');
+        $hash = new DocPage(__DIR__ . '/../doc/doc-en/en/reference/hash/functions/hash.xml');
+        $ctypePunct = new DocPage(__DIR__ . '/../doc/doc-en/en/reference/ctype/functions/ctype-punct.xml');
+        $strpos = new DocPage(__DIR__ . '/../doc/doc-en/en/reference/strings/functions/strpos.xml');
 
         $this->assertTrue($pregMatch->detectFalsyFunction());
         $this->assertFalse($implode->detectFalsyFunction());
@@ -29,6 +32,9 @@ class DocPageTest extends TestCase
         $this->assertFalse($arrayReplace->detectFalsyFunction());
         $this->assertTrue($mktime->detectFalsyFunction());
         $this->assertTrue($date->detectFalsyFunction());
+        $this->assertTrue($hash->detectFalsyFunction());
+        $this->assertFalse($ctypePunct->detectFalsyFunction());
+        $this->assertFalse($strpos->detectFalsyFunction());
     }
 
     public function testDetectNullsyFunction()

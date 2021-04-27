@@ -67,6 +67,27 @@ function gmp_import(string $data, int $word_size = 1, int $flags = GMP_MSW_FIRST
 
 
 /**
+ * Computes the inverse of num1 modulo
+ * num2.
+ *
+ * @param \GMP|string|int $num1 A GMP object, an integer or a numeric string.
+ * @param \GMP|string|int $num2 A GMP object, an integer or a numeric string.
+ * @return \GMP A GMP number on success or FALSE if an inverse does not exist.
+ * @throws GmpException
+ *
+ */
+function gmp_invert($num1, $num2): \GMP
+{
+    error_clear_last();
+    $result = \gmp_invert($num1, $num2);
+    if ($result === false) {
+        throw GmpException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
  *
  *
  * @param \GMP|string|int $seed The seed to be set for the gmp_random,

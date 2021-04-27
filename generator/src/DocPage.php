@@ -123,6 +123,26 @@ class DocPage
             return true;
         }
 
+        $fileWithoutEntities = preg_replace(subject: $file, pattern: '/&([^;]*);/', replacement: '$1');
+        if (!preg_match(subject: $fileWithoutEntities, pattern: '/Returns false if [^.]* not found/')) {
+            $doc = simplexml_load_string($fileWithoutEntities, options: LIBXML_NOWARNING ^ LIBXML_NOERROR);
+            if ($doc) {
+                $doc->registerXPathNamespace("docbook", "http://docbook.org/ns/docbook");
+                $result = $doc->xpath('//docbook:methodsynopsis/*[1]');
+                if ($result) {
+                    $returnType = $result[0];
+                    if (((string)$returnType['class']) === 'union') {
+                        foreach ($returnType->children() as $child) {
+                            /** @var \SimpleXMLElement $child */
+                            if (((string)$child) === 'false') {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         return false;
     }
 

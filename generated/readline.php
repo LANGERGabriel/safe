@@ -155,3 +155,29 @@ function readline_write_history(string $filename = null): void
         throw ReadlineException::createFromPhpError();
     }
 }
+
+
+/**
+ * Reads a single line from the user. You must add this line to the history
+ * yourself using readline_add_history.
+ *
+ * @param string|null $prompt You may specify a string with which to prompt the user.
+ * @return string Returns a single string from the user. The line returned has the ending
+ * newline removed.
+ * If there is no more data to read, then FALSE is returned.
+ * @throws ReadlineException
+ *
+ */
+function readline(?string $prompt = null): string
+{
+    error_clear_last();
+    if ($prompt !== null) {
+        $result = \readline($prompt);
+    } else {
+        $result = \readline();
+    }
+    if ($result === false) {
+        throw ReadlineException::createFromPhpError();
+    }
+    return $result;
+}

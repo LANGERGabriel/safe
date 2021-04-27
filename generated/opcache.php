@@ -24,6 +24,24 @@ function opcache_compile_file(string $filename): void
 
 
 /**
+ * This function returns configuration information about the cache instance
+ *
+ * @return array Returns an array of information, including ini, blacklist and version
+ * @throws OpcacheException
+ *
+ */
+function opcache_get_configuration(): array
+{
+    error_clear_last();
+    $result = \opcache_get_configuration();
+    if ($result === false) {
+        throw OpcacheException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
  * This function returns state information about the cache instance
  *
  * @param bool $include_scripts Include script specific state information

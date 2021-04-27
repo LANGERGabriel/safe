@@ -301,6 +301,38 @@ function ldap_exop_passwd($ldap, string $user = "", string $old_password = "", s
 
 
 /**
+ * Performs a Refresh extended operation and returns the data.
+ *
+ * @param resource $ldap An LDAP link identifier, returned by ldap_connect.
+ * @param string $dn dn of the entry to refresh.
+ * @param int $ttl Time in seconds (between 1 and 31557600) that the
+ * client requests that the entry exists in the directory before being
+ * automatically removed.
+ * @return int From RFC:
+ * The responseTtl field is the time in seconds which the server chooses
+ * to have as the time-to-live field for that entry.  It must not be any
+ * smaller than that which the client requested, and it may be larger.
+ * However, to allow servers to maintain a relatively accurate
+ * directory, and to prevent clients from abusing the dynamic
+ * extensions, servers are permitted to shorten a client-requested
+ * time-to-live value, down to a minimum of 86400 seconds (one day).
+ *
+ * FALSE will be returned on error.
+ * @throws LdapException
+ *
+ */
+function ldap_exop_refresh($ldap, string $dn, int $ttl): int
+{
+    error_clear_last();
+    $result = \ldap_exop_refresh($ldap, $dn, $ttl);
+    if ($result === false) {
+        throw LdapException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
  * Performs a WHOAMI extended operation and returns the data.
  *
  * @param resource $ldap An LDAP link identifier, returned by ldap_connect.
@@ -431,6 +463,26 @@ function ldap_first_entry($ldap, $result)
 {
     error_clear_last();
     $result = \ldap_first_entry($ldap, $result);
+    if ($result === false) {
+        throw LdapException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ *
+ *
+ * @param resource $ldap
+ * @param resource $result
+ * @return resource
+ * @throws LdapException
+ *
+ */
+function ldap_first_reference($ldap, $result)
+{
+    error_clear_last();
+    $result = \ldap_first_reference($ldap, $result);
     if ($result === false) {
         throw LdapException::createFromPhpError();
     }
@@ -1175,6 +1227,53 @@ function ldap_next_attribute($ldap, $entry): string
 
 
 /**
+ * Retrieve the entries stored in the result. Successive calls to the
+ * ldap_next_entry return entries one by one till there
+ * are no more entries. The first call to ldap_next_entry
+ * is made after the call to ldap_first_entry with the
+ * result as returned from the
+ * ldap_first_entry.
+ *
+ * @param resource $ldap An LDAP link identifier, returned by ldap_connect.
+ * @param resource $result
+ * @return resource Returns entry identifier for the next entry in the result whose entries
+ * are being read starting with ldap_first_entry. If
+ * there are no more entries in the result then it returns FALSE.
+ * @throws LdapException
+ *
+ */
+function ldap_next_entry($ldap, $result)
+{
+    error_clear_last();
+    $result = \ldap_next_entry($ldap, $result);
+    if ($result === false) {
+        throw LdapException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ *
+ *
+ * @param resource $ldap
+ * @param resource $entry
+ * @return resource
+ * @throws LdapException
+ *
+ */
+function ldap_next_reference($ldap, $entry)
+{
+    error_clear_last();
+    $result = \ldap_next_reference($ldap, $entry);
+    if ($result === false) {
+        throw LdapException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
  * Parse LDAP extended operation data from result object result
  *
  * @param resource $ldap An LDAP link identifier, returned by ldap_connect.
@@ -1689,6 +1788,25 @@ function ldap_set_option($ldap, int $option, $value): void
     if ($result === false) {
         throw LdapException::createFromPhpError();
     }
+}
+
+
+/**
+ *
+ *
+ * @param string $value
+ * @return string
+ * @throws LdapException
+ *
+ */
+function ldap_t61_to_8859(string $value): string
+{
+    error_clear_last();
+    $result = \ldap_t61_to_8859($value);
+    if ($result === false) {
+        throw LdapException::createFromPhpError();
+    }
+    return $result;
 }
 
 

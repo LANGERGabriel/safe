@@ -413,6 +413,27 @@ function odbc_execute($statement, array $params = []): void
 
 
 /**
+ * Fetch an associative array from an ODBC query.
+ *
+ * @param resource $statement The result resource from odbc_exec.
+ * @param int $row Optionally choose which row number to retrieve.
+ * @return array Returns an array that corresponds to the fetched row, or FALSE if there
+ * are no more rows.
+ * @throws UodbcException
+ *
+ */
+function odbc_fetch_array($statement, int $row = -1): array
+{
+    error_clear_last();
+    $result = \odbc_fetch_array($statement, $row);
+    if ($result === false) {
+        throw UodbcException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
  * Fetch one result row into array.
  *
  * @param resource $statement The result resource.
@@ -430,6 +451,27 @@ function odbc_fetch_into($statement, ?array &$array, int $row = 0): int
 {
     error_clear_last();
     $result = \odbc_fetch_into($statement, $array, $row);
+    if ($result === false) {
+        throw UodbcException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * Fetch an object from an ODBC query.
+ *
+ * @param int $statement The result resource from odbc_exec.
+ * @param int $row Optionally choose which row number to retrieve.
+ * @return object Returns an object that corresponds to the fetched row, or FALSE if there
+ * are no more rows.
+ * @throws UodbcException
+ *
+ */
+function odbc_fetch_object(int $statement, int $row = -1): object
+{
+    error_clear_last();
+    $result = \odbc_fetch_object($statement, $row);
     if ($result === false) {
         throw UodbcException::createFromPhpError();
     }

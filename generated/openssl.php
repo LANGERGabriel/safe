@@ -503,6 +503,28 @@ function openssl_digest(string $data, string $digest_algo, bool $binary = false)
 
 
 /**
+ * openssl_error_string returns the last error from the
+ * openSSL library.  Error messages are queued, so this function should be
+ * called multiple times to collect all of the information. The last error will
+ * be the most recent one.
+ *
+ * @return string Returns an error message string, or FALSE if there are no more error
+ * messages to return.
+ * @throws OpensslException
+ *
+ */
+function openssl_error_string(): string
+{
+    error_clear_last();
+    $result = \openssl_error_string();
+    if ($result === false) {
+        throw OpensslException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
  * Gets the list of available curve names for use in Elliptic curve
  * cryptography (ECC) for public/private key operations. The two most widely
  * standardized/supported curves are prime256v1
@@ -938,6 +960,35 @@ function openssl_pkey_export($key, ?string &$output, ?string $passphrase = null,
     if ($result === false) {
         throw OpensslException::createFromPhpError();
     }
+}
+
+
+/**
+ * This function returns the key details (bits, key, type).
+ *
+ * @param resource $key Resource holding the key.
+ * @return array Returns an array with the key details in success or FALSE in failure.
+ * Returned array has indexes bits (number of bits),
+ * key (string representation of the public key) and
+ * type (type of the key which is one of
+ * OPENSSL_KEYTYPE_RSA,
+ * OPENSSL_KEYTYPE_DSA,
+ * OPENSSL_KEYTYPE_DH,
+ * OPENSSL_KEYTYPE_EC or -1 meaning unknown).
+ *
+ * Depending on the key type used, additional details may be returned. Note that
+ * some elements may not always be available.
+ * @throws OpensslException
+ *
+ */
+function openssl_pkey_get_details($key): array
+{
+    error_clear_last();
+    $result = \openssl_pkey_get_details($key);
+    if ($result === false) {
+        throw OpensslException::createFromPhpError();
+    }
+    return $result;
 }
 
 
@@ -1428,6 +1479,32 @@ function openssl_x509_fingerprint($certificate, string $digest_algo = "sha1", bo
 {
     error_clear_last();
     $result = \openssl_x509_fingerprint($certificate, $digest_algo, $binary);
+    if ($result === false) {
+        throw OpensslException::createFromPhpError();
+    }
+    return $result;
+}
+
+
+/**
+ * openssl_x509_parse returns information about the
+ * supplied certificate, including fields such as subject
+ * name, issuer name, purposes, valid from and valid to dates etc.
+ *
+ * @param string|resource $certificate X509 certificate. See Key/Certificate parameters for a list of valid values.
+ * @param bool $short_names short_names controls how the data is indexed in the
+ * array - if short_names is TRUE (the default) then
+ * fields will be indexed with the short name form, otherwise, the long name
+ * form will be used - e.g.: CN is the shortname form of commonName.
+ * @return array The structure of the returned data is (deliberately) not
+ * yet documented, as it is still subject to change.
+ * @throws OpensslException
+ *
+ */
+function openssl_x509_parse($certificate, bool $short_names = true): array
+{
+    error_clear_last();
+    $result = \openssl_x509_parse($certificate, $short_names);
     if ($result === false) {
         throw OpensslException::createFromPhpError();
     }
