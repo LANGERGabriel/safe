@@ -123,9 +123,9 @@ class DocPage
             return true;
         }
 
-        $fileWithoutEntities = preg_replace(subject: $file, pattern: '/&([^;]*);/', replacement: '$1');
-        if (!preg_match(subject: $fileWithoutEntities, pattern: '/Returns false if [^.]* not found/')) {
-            $doc = simplexml_load_string($fileWithoutEntities, options: LIBXML_NOWARNING ^ LIBXML_NOERROR);
+        $fileWithoutEntities = \preg_replace(subject: $file, pattern: '/&([^;]*);/', replacement: '$1');
+        if ($fileWithoutEntities && !\preg_match(subject: $fileWithoutEntities, pattern: '/Returns false if [^.]* not found/')) {
+            $doc = \simplexml_load_string($fileWithoutEntities, options: LIBXML_NOWARNING ^ LIBXML_NOERROR);
             if ($doc) {
                 $doc->registerXPathNamespace("docbook", "http://docbook.org/ns/docbook");
                 $result = $doc->xpath('//docbook:methodsynopsis/*[1]');
