@@ -90,7 +90,7 @@ function iconv_get_encoding(string $type = "all")
  * If more than one field of the same name are present,
  * iconv_mime_decode_headers automatically incorporates
  * them into a numerically indexed array in the order of occurrence.
- * Note that header names are are not case-insensitive.
+ * Note that header names are not case-insensitive.
  * @throws IconvException
  *
  */

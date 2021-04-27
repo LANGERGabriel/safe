@@ -5,11 +5,17 @@ namespace Safe;
 use Safe\Exceptions\MbstringException;
 
 /**
+ * Returns a string containing the character specified by the Unicode code point value,
+ * encoded in the specified encoding.
  *
+ * This function complements mb_ord.
  *
- * @param int $codepoint
- * @param string $encoding
- * @return string Returns a specific character.
+ * @param int $codepoint A Unicode codepoint value, e.g. 128024 for U+1F418 ELEPHANT
+ * @param string $encoding The encoding
+ * parameter is the character encoding. If it is omitted or NULL, the internal character
+ * encoding value will be used.
+ * @return string A string containing the requested character, if it can be represented in the specified
+ * encoding.
  * @throws MbstringException
  *
  */
@@ -102,20 +108,37 @@ function mb_convert_variables(string $to_encoding, $from_encoding, &$var, ...$va
 
 
 /**
- * Detects character encoding in string string.
+ * Detects the most likely character encoding for string string
+ * from an ordered list of candidates.
  *
- * @param string $string The string being detected.
- * @param mixed $encodings encodings is list of character
- * encoding. Encoding order may be specified by array or comma
- * separated list string.
+ * Automatic detection of the intended character encoding can never be entirely reliable;
+ * without some additional information, it is similar to decoding an encrypted string
+ * without the key. It is always preferable to use an indication of character encoding
+ * stored or transmitted with the data, such as a "Content-Type" HTTP header.
+ *
+ * This function is most useful with multibyte encodings, where not all sequences of
+ * bytes form a valid string. If the input string contains such a sequence, that
+ * encoding will be rejected, and the next encoding checked.
+ *
+ * @param string $string The string being inspected.
+ * @param mixed $encodings A list of character encodings to try, in order. The list may be specified as
+ * an array of strings, or a single string separated by commas.
  *
  * If encodings is omitted or NULL,
- * detect_order is used.
- * @param bool $strict strict specifies whether to use
- * the strict encoding detection or not.
- * Default is FALSE.
- * @return string The detected character encoding or FALSE if the encoding cannot be
- * detected from the given string.
+ * the current detect_order (set with the
+ * mbstring.detect_order configuration option, or mb_detect_order
+ * function) will be used.
+ * @param bool $strict Controls the behaviour when string
+ * is not valid in any of the listed encodings.
+ * If strict is set to FALSE, the closest matching
+ * encoding will be returned; if strict is set to TRUE,
+ * FALSE will be returned.
+ *
+ * The default value for strict can be set
+ * with the
+ * mbstring.strict_detection configuration option.
+ * @return string The detected character encoding, or FALSE if the string is not valid
+ * in any of the listed encodings.
  * @throws MbstringException
  *
  */
@@ -560,11 +583,15 @@ function mb_internal_encoding(string $encoding = null)
 
 
 /**
+ * Returns the Unicode code point value of the given character.
  *
+ * This function complements mb_chr.
  *
- * @param string $string
- * @param string $encoding
- * @return int Returns a code point of character.
+ * @param string $string A string
+ * @param string $encoding The encoding
+ * parameter is the character encoding. If it is omitted or NULL, the internal character
+ * encoding value will be used.
+ * @return int The Unicode code point for the first character of string.
  * @throws MbstringException
  *
  */

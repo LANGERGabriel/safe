@@ -85,7 +85,7 @@ function curl_exec($handle)
  *
  *
  * CURLINFO_HTTP_CODE -  The last response code.
- * As of PHP 5.5.0 and cURL 7.10.8, this is a legacy alias of
+ * As of cURL 7.10.8, this is a legacy alias of
  * CURLINFO_RESPONSE_CODE
  *
  *
@@ -701,18 +701,6 @@ function curl_multi_init()
  *
  *
  *
- * CURLOPT_BINARYTRANSFER
- *
- * TRUE to return the raw output when
- * CURLOPT_RETURNTRANSFER is used.
- *
- *
- * From PHP 5.1.3, this option has no effect: the raw output will
- * always be returned when
- * CURLOPT_RETURNTRANSFER is used.
- *
- *
- *
  * CURLOPT_COOKIESESSION
  *
  * TRUE to mark this as a new cookie "session". It will force libcurl
@@ -733,7 +721,6 @@ function curl_multi_init()
  *
  *
  * Added in cURL 7.19.1.
- * Available since PHP 5.3.2.
  * Requires CURLOPT_VERBOSE to be on to have an effect.
  *
  *
@@ -746,7 +733,6 @@ function curl_multi_init()
  *
  *
  * Added in 7.15.2.
- * Available since PHP 5.5.0.
  *
  *
  *
@@ -912,7 +898,7 @@ function curl_multi_init()
  * the number of small packets on the network.
  *
  *
- * Available since PHP 5.2.1 for versions compiled with libcurl 7.11.2 or
+ * Available for versions compiled with libcurl 7.11.2 or
  * greater.
  *
  *
@@ -948,7 +934,7 @@ function curl_multi_init()
  * TRUE to track the handle's request string.
  *
  *
- * Available since PHP 5.1.3. The CURLINFO_
+ * The CURLINFO_
  * prefix is intentional.
  *
  *
@@ -986,7 +972,7 @@ function curl_multi_init()
  * FALSE to get the raw HTTP response body.
  *
  *
- * Available as of PHP 5.5.0 if built against libcurl &gt;= 7.16.2.
+ * Available if built against libcurl &gt;= 7.16.2.
  *
  *
  *
@@ -1279,21 +1265,6 @@ function curl_multi_init()
  *
  *
  *
- * CURLOPT_CLOSEPOLICY
- *
- * One of the CURLCLOSEPOLICY_* values.
- *
- *
- * This option is deprecated, as it was never implemented in cURL and
- * never had any effect.
- *
- *
- *
- *
- * Removed in PHP 5.6.0.
- *
- *
- *
  * CURLOPT_CONNECTTIMEOUT
  *
  * The number of seconds to wait while trying to connect. Use 0 to
@@ -1313,7 +1284,7 @@ function curl_multi_init()
  * timeouts with a minimum timeout allowed of one second.
  *
  *
- * Added in cURL 7.16.2. Available since PHP 5.2.3.
+ * Added in cURL 7.16.2.
  *
  *
  *
@@ -1504,7 +1475,7 @@ function curl_multi_init()
  * specific type of redirect occurs.
  *
  *
- * Added in cURL 7.19.1. Available since PHP 5.3.2.
+ * Added in cURL 7.19.1.
  *
  *
  *
@@ -1771,7 +1742,7 @@ function curl_multi_init()
  * supports them. If set to 0 (default) keepalive probes are disabled.
  *
  *
- * Added in cURL 7.25.0. Available since PHP 5.5.0.
+ * Added in cURL 7.25.0.
  *
  *
  *
@@ -1783,7 +1754,7 @@ function curl_multi_init()
  * The default is 60.
  *
  *
- * Added in cURL 7.25.0. Available since PHP 5.5.0.
+ * Added in cURL 7.25.0.
  *
  *
  *
@@ -1795,7 +1766,7 @@ function curl_multi_init()
  * The default is 60.
  *
  *
- * Added in cURL 7.25.0. Available since PHP 5.5.0.
+ * Added in cURL 7.25.0.
  *
  *
  *
@@ -1833,7 +1804,7 @@ function curl_multi_init()
  * timeouts with a minimum timeout allowed of one second.
  *
  *
- * Added in cURL 7.16.2. Available since PHP 5.2.3.
+ * Added in cURL 7.16.2.
  *
  *
  *
@@ -1868,7 +1839,7 @@ function curl_multi_init()
  * Defaults to unlimited speed.
  *
  *
- * Added in cURL 7.15.5. Available since PHP 5.4.0.
+ * Added in cURL 7.15.5.
  *
  *
  *
@@ -1880,7 +1851,7 @@ function curl_multi_init()
  * Defaults to unlimited speed.
  *
  *
- * Added in cURL 7.15.5. Available since PHP 5.4.0.
+ * Added in cURL 7.15.5.
  *
  *
  *
@@ -1921,15 +1892,12 @@ function curl_multi_init()
  * CURLFTPMETHOD_SINGLECWD.
  *
  *
- * Added in cURL 7.15.1. Available since PHP 5.3.0.
+ * Added in cURL 7.15.1.
  *
  *
  *
  *
  *
- *
- * This option is deprecated, as it was never implemented in cURL and
- * never had any effect.
  *
  * The HTTP authentication method(s) to use. The options are:
  * CURLAUTH_BASIC,
@@ -2085,7 +2053,7 @@ function curl_multi_init()
  * "RELOAD" loads all cookies from the files specified by CURLOPT_COOKIEFILE.
  *
  *
- * Available since PHP 5.5.0 and cURL 7.14.1.
+ * Available since cURL 7.14.1.
  *
  *
  *
@@ -2710,7 +2678,7 @@ function curl_multi_init()
  * The user name to use in authentication.
  *
  *
- * Added in cURL 7.19.1. Available since PHP 5.5.0.
+ * Added in cURL 7.19.1.
  *
  *
  *
@@ -2865,7 +2833,7 @@ function curl_multi_init()
  *
  *
  *
- * Added in cURL 7.21.3. Available since PHP 5.5.0.
+ * Added in cURL 7.21.3.
  *
  *
  *

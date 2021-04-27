@@ -541,7 +541,7 @@ function imap_fetchbody($imap, int $message_num, string $section, int $flags = 0
  *
  *
  *
- * FT_UID - The msgno
+ * FT_UID - The message_num
  * argument is a UID
  *
  *

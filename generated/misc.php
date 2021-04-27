@@ -256,7 +256,7 @@ function hrtime(bool $as_number = false)
  *
  *
  * Z
- * NUL-padded string (new in PHP 5.5)
+ * NUL-padded string
  *
  *
  * @
@@ -489,6 +489,21 @@ function time_sleep_until(float $timestamp): void
  * separate them by a slash /. If a repeater argument is present,
  * then each of the array keys will have a sequence number behind
  * the given name.
+ *
+ * Changes were made to bring this function into line with Perl:
+ *
+ *
+ * The "a" code now retains trailing NULL bytes.
+ *
+ *
+ * The "A" code now strips all trailing ASCII whitespace (spaces, tabs,
+ * newlines, carriage returns, and NULL bytes).
+ *
+ *
+ * The "Z" code was added for NULL-padded strings, and removes trailing
+ * NULL bytes.
+ *
+ *
  *
  * @param string $format See pack for an explanation of the format codes.
  * @param string $string The packed data.

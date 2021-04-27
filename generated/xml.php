@@ -11,8 +11,7 @@ use Safe\Exceptions\XmlException;
  *
  * @param string $encoding The input encoding is automatically detected, so that the
  * encoding parameter specifies only the output
- * encoding. In PHP 5.0.0 and 5.0.1, the default output charset is
- * ISO-8859-1, while in PHP 5.0.2 and upper is UTF-8. The supported
+ * encoding. The default output charset is UTF-8. The supported
  * encodings are ISO-8859-1, UTF-8 and
  * US-ASCII.
  * @param string $separator With a namespace aware parser tag parameters passed to the various
